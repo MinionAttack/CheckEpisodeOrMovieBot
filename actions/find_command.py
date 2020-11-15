@@ -25,19 +25,13 @@ def process_find_options(message: str) -> SendInformation:
         parameter = parameter.strip()
 
         if parameter.startswith('ts ') or parameter.startswith('tv_show '):
-            show_name = parameter[3:]
+            show_name = parse_tv_show(parameter)
         elif parameter.startswith('s ') or parameter.startswith('season '):
-            raw_input = parameter[2:]
-            if is_a_number(raw_input):
-                season = raw_input
+            season = parse_season(parameter)
         elif parameter.startswith('e ') or parameter.startswith('episode '):
-            raw_input = parameter[2:]
-            if is_a_number(raw_input):
-                episode = raw_input
+            episode = parse_episode(parameter)
         elif parameter.startswith('q ') or parameter.startswith('quality '):
-            raw_input = parameter[2:]
-            if is_a_number(raw_input) and f"{raw_input}p" in RESOLUTION_QUALITY:
-                quality = f"{raw_input}p"
+            quality = parse_quality(parameter)
 
     if (season != '') and (episode != '') and (quality != ''):
         options = Options(show_name, season, episode, quality)
@@ -46,6 +40,62 @@ def process_find_options(message: str) -> SendInformation:
         query_result = SendInformation('', f"{INCORRECT_FORMAT_FIND}")
 
     return query_result
+
+
+def parse_tv_show(parameter: str) -> str:
+    tv_show = ''
+
+    if parameter.startswith('ts '):
+        tv_show = parameter[3:]
+    elif parameter.startswith('tv_show '):
+        tv_show = parameter[8:]
+
+    return tv_show
+
+
+def parse_season(parameter: str) -> str:
+    raw_input = ''
+    season = ''
+
+    if parameter.startswith('s '):
+        raw_input = parameter[2:]
+    elif parameter.startswith('season '):
+        raw_input = parameter[7:]
+
+    if is_a_number(raw_input):
+        season = raw_input
+
+    return season
+
+
+def parse_episode(parameter: str) -> str:
+    raw_input = ''
+    episode = ''
+
+    if parameter.startswith('e '):
+        raw_input = parameter[2:]
+    elif parameter.startswith('episode '):
+        raw_input = parameter[8:]
+
+    if is_a_number(raw_input):
+        episode = raw_input
+
+    return episode
+
+
+def parse_quality(parameter: str) -> str:
+    raw_input = ''
+    quality = ''
+
+    if parameter.startswith('q '):
+        raw_input = parameter[2:]
+    elif parameter.startswith('quality '):
+        raw_input = parameter[8:]
+
+    if is_a_number(raw_input) and f"{raw_input}p" in RESOLUTION_QUALITY:
+        quality = f"{raw_input}p"
+
+    return quality
 
 
 def is_a_number(number: str) -> bool:
