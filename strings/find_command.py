@@ -2,6 +2,8 @@
 
 INCORRECT_FORMAT_FIND = f"Incorrect format, see the /options command for more details. \U0001F635"
 
+INCORRECT_CONTENT_TYPE = f"Sorry, but this bot can only search TV shows, not movies. \U0001F641"
+
 NO_IMDB_ID_FOUND = f"Could not find an IMDb ID for this TV show. \U0001F615"
 
 NO_TORRENTS_FOUND = f"No torrent results found for this TV show. \U0001F61E"

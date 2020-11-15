@@ -9,7 +9,8 @@ from providers.EZTV import search_show_by_imdb
 from providers.OMDbAPI import search_show_by_name
 from resources.properties import EXTRA_QUALITY_OPTIONS, IMAGE_FORMAT, PLATFORMS, RESOLUTION_QUALITY, WEBRIP, WEB_DL
 from src.logger import logger
-from strings.find_command import INCORRECT_FORMAT_FIND, NO_IMDB_ID_FOUND, NO_TORRENTS_FOUND, SHOW_CAN_CONTAIN_SUBTITLES
+from strings.find_command import INCORRECT_CONTENT_TYPE, INCORRECT_FORMAT_FIND, NO_IMDB_ID_FOUND, NO_TORRENTS_FOUND
+from strings.find_command import SHOW_CAN_CONTAIN_SUBTITLES
 
 
 def process_find_options(message: str) -> SendInformation:
@@ -110,19 +111,17 @@ def find_episode_torrents(options: Options) -> SendInformation:
     logger.info(f"Finding IMDb TV show ID for: {options.show_name}")
 
     search_result = search_show_by_name(options.show_name)
-    if not is_empty_result_show(search_result):
+    if not search_result.is_empty() and search_result.is_tv_show():
         template_information = find_show_torrents(options, search_result)
-        if template_information is not None:
+        if template_information.torrents is not None:
             message = create_telegram_message(template_information)
             return message
         else:
             return SendInformation('', f"{NO_TORRENTS_FOUND}")
+    elif not search_result.is_tv_show():
+        return SendInformation('', f"{INCORRECT_CONTENT_TYPE}")
     else:
         return SendInformation('', f"{NO_IMDB_ID_FOUND}")
-
-
-def is_empty_result_show(search_result: ByName) -> bool:
-    return search_result.title == '' and search_result.poster_url == '' and search_result.seasons == '' and search_result.imdb_id == ''
 
 
 def find_show_torrents(options: Options, search_result: ByName) -> TemplateInformation:
