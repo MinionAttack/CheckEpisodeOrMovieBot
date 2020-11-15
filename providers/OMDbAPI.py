@@ -17,19 +17,26 @@ def search_show_by_name(name: str) -> ByName:
     if request.status_code == 200:
         json_object = request.json()
         response = json_object['Response']
-        content_type = json_object['Type']
 
-        if response == 'True' and content_type == 'series':
-            title = json_object['Title']
-            poster_url = json_object['Poster']
-            seasons = json_object['totalSeasons']
-            imdb_id = json_object['imdbID']
-            parsed_imdb_id = imdb_id[2:10]
-            result = ByName(title, poster_url, seasons, imdb_id, parsed_imdb_id, content_type)
+        if response == 'True':
+            content_type = json_object['Type']
 
-            return result
+            if content_type == 'series':
+                title = json_object['Title']
+                poster_url = json_object['Poster']
+                seasons = json_object['totalSeasons']
+                imdb_id = json_object['imdbID']
+                parsed_imdb_id = imdb_id[2:10]
+                result = ByName(title, poster_url, seasons, imdb_id, parsed_imdb_id, content_type)
+
+                return result
+            else:
+                return ByName(content_type=content_type)
         else:
-            return ByName(content_type=content_type)
+            error = json_object['Error']
+            logger.warning(f"Error from OMDb API: {error}")
+
+            return ByName(error=True, error_message=error)
     else:
         logger.warning(f"Error connecting to OMDb API. The service may not be available at this time.")
 

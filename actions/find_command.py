@@ -34,7 +34,7 @@ def process_find_options(message: str) -> SendInformation:
         elif parameter.startswith('q ') or parameter.startswith('quality '):
             quality = parse_quality(parameter)
 
-    if (season != '') and (episode != '') and (quality != ''):
+    if check_correct_parameters(show_name, season, episode, quality):
         options = Options(show_name, season, episode, quality)
         query_result = find_episode_torrents(options)
     else:
@@ -107,6 +107,10 @@ def is_a_number(number: str) -> bool:
         return False
 
 
+def check_correct_parameters(show_name: str, season: str, episode: str, quality: str) -> bool:
+    return (show_name != '') and (season != '') and (episode != '') and (quality != '')
+
+
 def find_episode_torrents(options: Options) -> SendInformation:
     logger.info(f"Finding IMDb TV show ID for: {options.show_name}")
 
@@ -118,6 +122,8 @@ def find_episode_torrents(options: Options) -> SendInformation:
             return message
         else:
             return SendInformation('', f"{NO_TORRENTS_FOUND}")
+    elif search_result.error:
+        return SendInformation('', f"{search_result.error_message}")
     elif not search_result.is_tv_show():
         return SendInformation('', f"{INCORRECT_CONTENT_TYPE}")
     else:
