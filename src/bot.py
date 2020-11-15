@@ -5,15 +5,11 @@
 Press Ctrl-C on the command line or send a signal to the process to stop the bot.
 """
 
-import html
-import json
-import traceback
-
-from telegram import Update, ParseMode
+from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 
-from src.command_handlers import echo, find_command, start_command, options_command
 from resources.properties import BOT_TOKEN
+from src.command_handlers import echo, find_command, start_command, status_command, options_command
 from src.logger import logger
 
 
@@ -23,6 +19,7 @@ def error_handler(update: Update, context: CallbackContext) -> None:
 
 def configure_dispatcher(dispatcher):
     dispatcher.add_handler(CommandHandler('start', start_command))
+    dispatcher.add_handler(CommandHandler('status', status_command))
     dispatcher.add_handler(CommandHandler('options', options_command))
     dispatcher.add_handler(CommandHandler('find', find_command))
 
