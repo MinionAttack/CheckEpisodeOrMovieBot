@@ -22,16 +22,21 @@ def search_show_by_imdb(show_id: str) -> ByIMDb:
 
         imdb_id = json_object['imdb_id']
         torrents_count = json_object['torrents_count']
-        torrents = json_object['torrents']
-        pages = measure_number_pages(torrents_count)
-        if pages > 1:
-            total_torrents = requests_remaining_pages(show_id, pages, torrents)
-        else:
-            total_torrents = torrents
-        parsed_torrents = parse_available_torrents(total_torrents)
-        result = ByIMDb(imdb_id, torrents_count, parsed_torrents)
+        if torrents_count > 0:
+            torrents = json_object['torrents']
+            pages = measure_number_pages(torrents_count)
+            if pages > 1:
+                total_torrents = requests_remaining_pages(show_id, pages, torrents)
+            else:
+                total_torrents = torrents
+            parsed_torrents = parse_available_torrents(total_torrents)
+            result = ByIMDb(imdb_id, torrents_count, parsed_torrents)
 
-        return result
+            return result
+        else:
+            logger.warning(f"No results for the show with IMDb ID {show_id}")
+
+            return ByIMDb()
     else:
         logger.warning(f"No results for the show with IMDb ID {show_id}")
 
