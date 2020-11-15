@@ -28,3 +28,6 @@ class ByIMDb:
 
     def __str__(self):
         return f"IMDb ID: {self.imdb_id}\nNumber of torrents: {self.torrents_count}\nTorrents: {self.torrents}\n"
+
+    def is_empty(self):
+        return self.imdb_id == '' and self.torrents_count == '' and self.torrents is None

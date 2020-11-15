@@ -113,7 +113,7 @@ def find_episode_torrents(options: Options) -> SendInformation:
     search_result = search_show_by_name(options.show_name)
     if not search_result.is_empty() and search_result.is_tv_show():
         template_information = find_show_torrents(options, search_result)
-        if template_information.torrents is not None:
+        if not template_information.is_empty():
             message = create_telegram_message(template_information)
             return message
         else:
@@ -130,7 +130,7 @@ def find_show_torrents(options: Options, search_result: ByName) -> TemplateInfor
     parsed_imdb_id = search_result.parsed_imdb_id
     poster_url = search_result.poster_url
     available_results = search_show_by_imdb(parsed_imdb_id)
-    if not is_empty_result_torrent(available_results):
+    if not available_results.is_empty():
         filtered_torrents = filter_available_torrents(options, available_results)
         if filtered_torrents:
             template_information = TemplateInformation(poster_url, filtered_torrents)
@@ -139,10 +139,6 @@ def find_show_torrents(options: Options, search_result: ByName) -> TemplateInfor
             TemplateInformation()
     else:
         return TemplateInformation()
-
-
-def is_empty_result_torrent(search_result: ByIMDb) -> bool:
-    return search_result.imdb_id == '' and search_result.torrents_count == '' and search_result.torrents is None
 
 
 def filter_available_torrents(options: Options, available_results: ByIMDb) -> List[DisplayTorrentInformation]:

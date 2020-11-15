@@ -34,6 +34,9 @@ class TemplateInformation:
     def __str__(self):
         return f"Poster URL: {self.poster_url}\nTorrents: {self.torrents}\n"
 
+    def is_empty(self):
+        return self.poster_url == '' and self.torrents is None
+
 
 class SendInformation:
     def __init__(self, photo_url: str = '', caption: str = ''):
