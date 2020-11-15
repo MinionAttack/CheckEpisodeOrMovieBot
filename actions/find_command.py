@@ -136,7 +136,7 @@ def find_show_torrents(options: Options, search_result: ByName) -> TemplateInfor
             template_information = TemplateInformation(poster_url, filtered_torrents)
             return template_information
         else:
-            TemplateInformation()
+            return TemplateInformation()
     else:
         return TemplateInformation()
 
