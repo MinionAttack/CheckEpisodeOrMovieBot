@@ -2,7 +2,7 @@
 
 import requests
 
-from classes.ShowSearchResult import ByName
+from classes.OMDbAPI import ByName
 from resources.properties import OMDB_API_KEY
 from src.logger import logger
 

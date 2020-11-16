@@ -5,7 +5,7 @@ from typing import List
 
 import requests
 
-from classes.TorrentSearchResult import ByIMDb, TorrentAvailable
+from classes.EZTV import ByIMDb, TorrentAvailable
 from src.logger import logger
 
 EZTV_API = 'https://eztv.re/api/get-torrents?limit={}&page={}&imdb_id={}'

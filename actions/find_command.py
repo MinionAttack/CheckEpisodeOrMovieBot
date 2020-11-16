@@ -3,8 +3,8 @@ from typing import List
 
 from classes.ConvertBytes import HumanBytes
 from classes.FindCommand import DisplayTorrentInformation, Options, SendInformation, TemplateInformation
-from classes.ShowSearchResult import ByName
-from classes.TorrentSearchResult import ByIMDb, TorrentAvailable
+from classes.OMDbAPI import ByName
+from classes.EZTV import ByIMDb, TorrentAvailable
 from providers.EZTV import search_show_by_imdb
 from providers.OMDbAPI import search_show_by_name
 from resources.properties import EXTRA_QUALITY_OPTIONS, IMAGE_FORMAT, PLATFORMS, RESOLUTION_QUALITY, WEBRIP, WEB_DL
