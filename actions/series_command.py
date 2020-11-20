@@ -9,8 +9,8 @@ from providers.EZTV import search_series_by_imdb
 from providers.OMDbAPI import search_series_by_name
 from resources.properties import EXTRA_QUALITY_OPTIONS, IMAGE_FORMAT, PLATFORMS, RESOLUTION_QUALITY, WEBRIP, WEB_DL
 from src.logger import logger
-from strings.find_command import SEARCH_MOVIE_SERIES_COMMAND, INCORRECT_FORMAT_FIND, NO_IMDB_ID_FOUND, NO_TORRENTS_FOUND
-from strings.find_command import SERIES_CAN_CONTAIN_SUBTITLES
+from strings.series_command import INCORRECT_FORMAT_SERIES, NO_IMDB_ID_FOUND, NO_TORRENTS_FOUND, SEARCH_MOVIE_SERIES_COMMAND
+from strings.series_command import SERIES_CAN_CONTAIN_SUBTITLES
 
 
 def process_series_options(message: str) -> SendInformation:
@@ -38,7 +38,7 @@ def process_series_options(message: str) -> SendInformation:
         options = Options(series_name, season, episode, quality)
         query_result = find_episode_torrents(options)
     else:
-        query_result = SendInformation('', f"{INCORRECT_FORMAT_FIND}")
+        query_result = SendInformation('', f"{INCORRECT_FORMAT_SERIES}")
 
     return query_result
 

@@ -5,7 +5,7 @@ import requests
 from classes.OMDbAPI import ByName
 from resources.properties import OMDB_API_KEY
 from src.logger import logger
-from strings.find_command import INCORRECTLY_WRITTEN_NAME
+from strings.series_command import INCORRECTLY_WRITTEN_NAME
 
 OMDB_API_URL = 'http://www.omdbapi.com'
 
