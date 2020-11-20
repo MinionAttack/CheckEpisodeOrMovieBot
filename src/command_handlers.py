@@ -3,8 +3,8 @@
 from telegram import Update, User
 from telegram.ext import CallbackContext
 
-from actions.find_command import process_find_options
 from actions.options_command import get_options_details
+from actions.series_command import process_find_options
 from src.logger import logger
 from strings.command_handlers import SEE_RESULTS, STATUS_COMMAND, UNKNOWN_USER, WELCOME_START_COMMAND, WRONG_FORMAT_ECHO_COMMAND
 
