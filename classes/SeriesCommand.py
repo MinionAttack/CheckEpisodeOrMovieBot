@@ -55,4 +55,4 @@ class Options:
         self.quality = quality
 
     def __str__(self):
-        return f"TV Show name: {self.series_name}\nSeason: {self.season}\nEpisode: {self.episode}\nQuality: {self.quality}\n"
+        return f"Series name: {self.series_name}\nSeason: {self.season}\nEpisode: {self.episode}\nQuality: {self.quality}\n"
