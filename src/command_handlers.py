@@ -4,7 +4,7 @@ from telegram import Update, User
 from telegram.ext import CallbackContext
 
 from actions.options_command import get_options_details
-from actions.series_command import process_find_options
+from actions.series_command import process_series_options
 from src.logger import logger
 from strings.command_handlers import SEE_RESULTS, STATUS_COMMAND, UNKNOWN_USER, WELCOME_START_COMMAND, WRONG_FORMAT_ECHO_COMMAND
 
@@ -53,7 +53,7 @@ def series_command(update: Update, context: CallbackContext) -> None:
     logger.info(f"Incoming search request from user: {identifier}")
 
     message = update.effective_message.text.strip()
-    available_options = process_find_options(message)
+    available_options = process_series_options(message)
 
     logger.info(f"Sending results to the user: {identifier}")
     photo_url = available_options.photo_url

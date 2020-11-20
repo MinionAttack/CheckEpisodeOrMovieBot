@@ -13,7 +13,7 @@ from strings.find_command import SEARCH_MOVIE_SERIES_COMMAND, INCORRECT_FORMAT_F
 from strings.find_command import SERIES_CAN_CONTAIN_SUBTITLES
 
 
-def process_find_options(message: str) -> SendInformation:
+def process_series_options(message: str) -> SendInformation:
     logger.info(f"Processing received message: {message}")
 
     series_name = ''
