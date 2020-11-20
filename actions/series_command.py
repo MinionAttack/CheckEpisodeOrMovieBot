@@ -2,7 +2,7 @@
 from typing import List
 
 from classes.ConvertBytes import HumanBytes
-from classes.FindCommand import DisplayTorrentInformation, Options, SendInformation, TemplateInformation
+from classes.SeriesCommand import DisplayTorrentInformation, Options, SendInformation, TemplateInformation
 from classes.OMDbAPI import ByName
 from classes.EZTV import ByIMDb, TorrentAvailable
 from providers.EZTV import search_series_by_imdb
