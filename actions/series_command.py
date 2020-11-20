@@ -44,14 +44,14 @@ def process_series_options(message: str) -> SendInformation:
 
 
 def parse_name(parameter: str) -> str:
-    series = ''
+    name = ''
 
     if parameter.startswith('n '):
-        series = parameter[2:]
+        name = parameter[2:]
     elif parameter.startswith('name '):
-        series = parameter[5:]
+        name = parameter[5:]
 
-    return series
+    return name
 
 
 def parse_season(parameter: str) -> str:
