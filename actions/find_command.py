@@ -5,18 +5,18 @@ from classes.ConvertBytes import HumanBytes
 from classes.FindCommand import DisplayTorrentInformation, Options, SendInformation, TemplateInformation
 from classes.OMDbAPI import ByName
 from classes.EZTV import ByIMDb, TorrentAvailable
-from providers.EZTV import search_show_by_imdb
-from providers.OMDbAPI import search_show_by_name
+from providers.EZTV import search_series_by_imdb
+from providers.OMDbAPI import search_series_by_name
 from resources.properties import EXTRA_QUALITY_OPTIONS, IMAGE_FORMAT, PLATFORMS, RESOLUTION_QUALITY, WEBRIP, WEB_DL
 from src.logger import logger
-from strings.find_command import INCORRECT_CONTENT_TYPE, INCORRECT_FORMAT_FIND, NO_IMDB_ID_FOUND, NO_TORRENTS_FOUND
-from strings.find_command import SHOW_CAN_CONTAIN_SUBTITLES
+from strings.find_command import SEARCH_MOVIE_SERIES_COMMAND, INCORRECT_FORMAT_FIND, NO_IMDB_ID_FOUND, NO_TORRENTS_FOUND
+from strings.find_command import SERIES_CAN_CONTAIN_SUBTITLES
 
 
 def process_find_options(message: str) -> SendInformation:
     logger.info(f"Processing received message: {message}")
 
-    show_name = ''
+    series_name = ''
     season = ''
     episode = ''
     quality = ''
@@ -25,8 +25,8 @@ def process_find_options(message: str) -> SendInformation:
     for parameter in parameters:
         parameter = parameter.strip()
 
-        if parameter.startswith('ts ') or parameter.startswith('tv_show '):
-            show_name = parse_tv_show(parameter)
+        if parameter.startswith('n ') or parameter.startswith('name '):
+            series_name = parse_name(parameter)
         elif parameter.startswith('s ') or parameter.startswith('season '):
             season = parse_season(parameter)
         elif parameter.startswith('e ') or parameter.startswith('episode '):
@@ -34,8 +34,8 @@ def process_find_options(message: str) -> SendInformation:
         elif parameter.startswith('q ') or parameter.startswith('quality '):
             quality = parse_quality(parameter)
 
-    if check_correct_parameters(show_name, season, episode, quality):
-        options = Options(show_name, season, episode, quality)
+    if check_correct_parameters(series_name, season, episode, quality):
+        options = Options(series_name, season, episode, quality)
         query_result = find_episode_torrents(options)
     else:
         query_result = SendInformation('', f"{INCORRECT_FORMAT_FIND}")
@@ -43,15 +43,15 @@ def process_find_options(message: str) -> SendInformation:
     return query_result
 
 
-def parse_tv_show(parameter: str) -> str:
-    tv_show = ''
+def parse_name(parameter: str) -> str:
+    series = ''
 
-    if parameter.startswith('ts '):
-        tv_show = parameter[3:]
-    elif parameter.startswith('tv_show '):
-        tv_show = parameter[8:]
+    if parameter.startswith('n '):
+        series = parameter[2:]
+    elif parameter.startswith('name '):
+        series = parameter[5:]
 
-    return tv_show
+    return series
 
 
 def parse_season(parameter: str) -> str:
@@ -107,16 +107,16 @@ def is_a_number(number: str) -> bool:
         return False
 
 
-def check_correct_parameters(show_name: str, season: str, episode: str, quality: str) -> bool:
-    return (show_name != '') and (season != '') and (episode != '') and (quality != '')
+def check_correct_parameters(series_name: str, season: str, episode: str, quality: str) -> bool:
+    return (series_name != '') and (season != '') and (episode != '') and (quality != '')
 
 
 def find_episode_torrents(options: Options) -> SendInformation:
-    logger.info(f"Finding IMDb TV show ID for: {options.show_name}")
+    logger.info(f"Finding IMDb series ID for: {options.series_name}")
 
-    search_result = search_show_by_name(options.show_name)
-    if not search_result.is_empty() and search_result.is_tv_show():
-        template_information = find_show_torrents(options, search_result)
+    search_result = search_series_by_name(options.series_name)
+    if not search_result.is_empty() and search_result.is_series():
+        template_information = find_series_torrents(options, search_result)
         if not template_information.is_empty():
             message = create_telegram_message(template_information)
             return message
@@ -124,18 +124,18 @@ def find_episode_torrents(options: Options) -> SendInformation:
             return SendInformation('', f"{NO_TORRENTS_FOUND}")
     elif search_result.error:
         return SendInformation('', f"{search_result.error_message}")
-    elif not search_result.is_tv_show():
-        return SendInformation('', f"{INCORRECT_CONTENT_TYPE}")
+    elif not search_result.is_series():
+        return SendInformation('', f"{SEARCH_MOVIE_SERIES_COMMAND}")
     else:
         return SendInformation('', f"{NO_IMDB_ID_FOUND}")
 
 
-def find_show_torrents(options: Options, search_result: ByName) -> TemplateInformation:
-    logger.info(f"Finding torrents for: {options.show_name}")
+def find_series_torrents(options: Options, search_result: ByName) -> TemplateInformation:
+    logger.info(f"Finding torrents for: {options.series_name}")
 
     parsed_imdb_id = search_result.parsed_imdb_id
     poster_url = search_result.poster_url
-    available_results = search_show_by_imdb(parsed_imdb_id)
+    available_results = search_series_by_imdb(parsed_imdb_id)
     if not available_results.is_empty():
         filtered_torrents = filter_available_torrents(options, available_results)
         if filtered_torrents:
@@ -148,7 +148,7 @@ def find_show_torrents(options: Options, search_result: ByName) -> TemplateInfor
 
 
 def filter_available_torrents(options: Options, available_results: ByIMDb) -> List[DisplayTorrentInformation]:
-    logger.info(f"Filtering torrents for: {options.show_name}")
+    logger.info(f"Filtering torrents for: {options.series_name}")
     parsed_torrents = []
 
     torrents = available_results.torrents
@@ -297,7 +297,7 @@ def create_telegram_message(template_information: TemplateInformation) -> SendIn
         if torrent.release_type != '':
             text_template = text_template + f"<strong>Release type:</strong> {torrent.release_type}\n"
         if torrent.subtitles:
-            text_template = text_template + f"<strong>Note:</strong> {SHOW_CAN_CONTAIN_SUBTITLES}\n"
+            text_template = text_template + f"<strong>Note:</strong> {SERIES_CAN_CONTAIN_SUBTITLES}\n"
         if torrent.scene != '':
             text_template = text_template + f"<strong>Scene:</strong> {torrent.scene}\n"
         text_template = text_template + f"<strong>File type:</strong> {torrent.file_type}\n"

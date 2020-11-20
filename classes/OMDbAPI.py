@@ -19,5 +19,5 @@ class ByName:
     def is_empty(self):
         return self.title == '' and self.poster_url == '' and self.seasons == '' and self.imdb_id == ''
 
-    def is_tv_show(self):
+    def is_series(self):
         return self.content_type == 'series'

@@ -48,11 +48,11 @@ class SendInformation:
 
 
 class Options:
-    def __init__(self, show_name: str = '', season: str = '', episode: str = '', quality: str = ''):
-        self.show_name = show_name
+    def __init__(self, series_name: str = '', season: str = '', episode: str = '', quality: str = ''):
+        self.series_name = series_name
         self.season = season
         self.episode = episode
         self.quality = quality
 
     def __str__(self):
-        return f"TV Show name: {self.show_name}\nSeason: {self.season}\nEpisode: {self.episode}\nQuality: {self.quality}\n"
+        return f"TV Show name: {self.series_name}\nSeason: {self.season}\nEpisode: {self.episode}\nQuality: {self.quality}\n"

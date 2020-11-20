@@ -46,8 +46,8 @@ def echo(update: Update, context: CallbackContext) -> None:
     update.effective_message.reply_text(WRONG_FORMAT_ECHO_COMMAND)
 
 
-def find_command(update: Update, context: CallbackContext) -> None:
-    """Sends a message when the user request to find an episode when the /find command is issued."""
+def series_command(update: Update, context: CallbackContext) -> None:
+    """Sends a message when the user request to find an episode when the /series command is issued."""
     user_info = update.effective_message.from_user
     identifier = get_user(user_info)
     logger.info(f"Incoming search request from user: {identifier}")

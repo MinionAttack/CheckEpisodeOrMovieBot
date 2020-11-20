@@ -2,10 +2,12 @@
 
 INCORRECT_FORMAT_FIND = f"Incorrect format, see the /options command for more details. \U0001F635"
 
-INCORRECT_CONTENT_TYPE = f"Sorry, but this bot can only search TV shows, not movies. \U0001F641"
+SEARCH_MOVIE_SERIES_COMMAND = f"You are trying to search for a movie with the command for series. \U0001F928"
 
-NO_IMDB_ID_FOUND = f"Could not find an IMDb ID for this TV show. \U0001F615"
+INCORRECTLY_WRITTEN_NAME = f"The request could not be made, check that you have entered the name correctly. \U0001F9D0"
 
-NO_TORRENTS_FOUND = f"No torrent results found for this TV show. \U0001F61E"
+NO_IMDB_ID_FOUND = f"Could not find an IMDb ID. \U0001F615"
 
-SHOW_CAN_CONTAIN_SUBTITLES = f"This option can contain the official subtitles."
+NO_TORRENTS_FOUND = f"No torrent results found. \U0001F61E"
+
+SERIES_CAN_CONTAIN_SUBTITLES = f"This option can contain the official subtitles."

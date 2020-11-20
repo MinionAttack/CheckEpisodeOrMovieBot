@@ -1,5 +1,5 @@
 
-# Check Episode (Telegram bot)
+# Check episode or movie (Telegram bot)
 
 ![build](https://img.shields.io/badge/build-passing-brightgreen) ![license](https://img.shields.io/badge/license-MIT-brightgreen) ![python](https://img.shields.io/badge/python-3.8%2B-blue) ![platform](https://img.shields.io/badge/platform-linux--64%20%7C%20win--64-lightgrey)
   
@@ -18,12 +18,12 @@ Table of contents.
 ## Author disclaimer
 This project has been carried out solely and exclusively for self-learning reasons and to show it as a career portfolio. 
 
-This project does not violate the *Digital Millennium Copyright Act* (*DMCA*) because it only indicates where the information the user is looking for is located. No software, images, movies, TV shows or music are stored on a server owned by the author of this project and this bot does not make illegal copies, or damage or infringe any *Copyright*©.
+This project does not violate the *Digital Millennium Copyright Act* (*DMCA*) because it only indicates where the information the user is looking for is located. No software, images, movies, series or music are stored on a server owned by the author of this project and this bot does not make illegal copies, or damage or infringe any *Copyright*©.
 
 Everything that this bot processes and sends to the user who has requested it is available on the *World Wide Web*, the Internet, so this bot only limits itself to saying where the information is and how to get it, this bot does not provide it.
 
 ## Introduction
-Every week, when I want to check if the episodes of the TV shows that I follow are already published, I have to visit some web pages that I use to download the episodes and go looking one by one by hand.
+Every week, when I want to check if a movie or the episodes of the series that I follow are already published, I have to visit some web pages that I use to download the episodes and go looking one by one by hand.
 
 Although it doesn't take long, it doesn't stop being repetitive and it's always the same, so I thought... why do it myself when a bunch of 0's and 1's can do it for me and save me that time?
 
@@ -32,10 +32,10 @@ And that is why you are reading this.
 ## Requisites
 In order to use the bot it is necessary to have a compatible environment:
 
- -  **Operative system**: A *Linux* or *Windows* based system where the bot will run.
- - **Python version**: The bot has been developed with version *3.8.5*. It may work with older versions, but this has not been tested.
- - **A Telegram account**: You need to have a *Telegram* account to be able to run the bot, configure the bot, access it and use it. You can create an account at the following [link][1].
-- **An OMDb API account**: You need to have an *OMDb API* account to run the bot as it is the provider of *IMDb* identifiers for TV shows and these identifiers are used to find *Torrent* files. With a *free account* it is enough if you are not going to have a high number of requests, since this account *is limited to 1000 requests per day*. You can create an account at the following [link][2]. **Remember to validate the *API Key* by clicking the activation link in the activation email sent after completing the registration process**.
+- **Operative system**: A *Linux* or *Windows* based system where the bot will run.
+- **Python version**: The bot has been developed with version *3.8.5*. It may work with older versions, but this has not been tested.
+- **A Telegram account**: You need to have a *Telegram* account to be able to run the bot, configure the bot, access it and use it. You can create an account at the following [link][1].
+- **An OMDb API account**: You need to have an *OMDb API* account to run the bot as it is the provider of *IMDb* identifiers for series and these identifiers are used to find *Torrent* files. With a *free account* it is enough if you are not going to have a high number of requests, since this account *is limited to 1000 requests per day*. You can create an account at the following [link][2]. **Remember to validate the *API Key* by clicking the activation link in the activation email sent after completing the registration process**.
 
 [1]: https://web.telegram.org/#/login
 [2]: http://www.omdbapi.com/apikey.aspx
@@ -115,7 +115,7 @@ python3 src/bot.py
 You can use the bot in two ways.
 
  - Accessing the official instance of the bot running on my personal *Raspberry Pi 3B+* in my apartment by clicking on the following link:
-	 - [https://t.me/CheckEpisodeBot][4]
+	 - [https://t.me/CheckEpisodeOrMovieBot][4]
 	 - There is no guarantee that it will be working 24/7.
  - Using your own instance of the bot:
 	 - Go to the root folder of the project and grant execute permissions to `bot.py` file:
@@ -129,14 +129,14 @@ Right now there are only four commands available:
  - **Start**: Use this command to display the welcome message.
  - **Status**: Use this command to find out if the bot is working. If you do not get a response from this command, the bot is not working.
  - **Options**: Use this command to view help text with information for all available commands.
- - **Find**: Use this command to search for available torrents on an episode of a TV show. There are two syntaxes, one short and one long:
-	 - **Long syntax**: `/find -tv_show name -season number -episode number -quality number`
-	 - **Short syntax**: `/find -ts name -s number -e number -q number`
+ - **Series**: Use this command to search for available torrents on an episode of a series. There are two syntaxes, one short and one long:
+	 - **Long syntax**: `/series -name name -season number -episode number -quality number`
+	 - **Short syntax**: `/series -n name -s number -e number -q number`
 	 - **Considerations to take into account**:
-		 - The name of the TV show must be spelled the same way it is displayed on **IMDb**.
+		 - The name of the series must be spelled the same way it is displayed on **IMDb**.
 		 - The available qualities are: 480 (SD), 720 (HD), 1080 (FHD) and 2160 (UHD).
 		 - The number specified for the quality must not include the scan type. If you want HD content write 720 but not 720i or 720p, the same for SD (480) content, Full HD (1080) content and Ultra HD (2160) content. **Do not include the letter**.
-		 - The details displayed in each torrent may vary depending on the name of the video file. For the same episode of a TV show, the details may not match because the files do not have the same structure or not all the details have been included in the file name. 
+		 - The details displayed in each torrent may vary depending on the name of the video file. For the same episode of a series, the details may not match because the files do not have the same structure or not all the details have been included in the file name. 
 
 I may add new options in the future as new ideas come to mind or add more Torrents providers.
 

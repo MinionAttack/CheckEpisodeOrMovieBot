@@ -8,14 +8,15 @@ import requests
 from classes.EZTV import ByIMDb, TorrentAvailable
 from src.logger import logger
 
-EZTV_API = 'https://eztv.re/api/get-torrents?limit={}&page={}&imdb_id={}'
+EZTV_API = 'https://eztv.re/api/get-torrents'
 # Results per page, between 1 and 100
 LIMIT = 100
 INITIAL_PAGE = 1
 
 
-def search_show_by_imdb(show_id: str) -> ByIMDb:
-    request = requests.get(EZTV_API.format(LIMIT, INITIAL_PAGE, show_id))
+def search_series_by_imdb(series_id: str) -> ByIMDb:
+    payload = {'limit': LIMIT, 'page': INITIAL_PAGE, 'imdb_id': series_id}
+    request = requests.get(EZTV_API, payload)
 
     if request.status_code == 200:
         json_object = request.json()
@@ -26,7 +27,7 @@ def search_show_by_imdb(show_id: str) -> ByIMDb:
             torrents = json_object['torrents']
             pages = measure_number_pages(torrents_count)
             if pages > 1:
-                total_torrents = requests_remaining_pages(show_id, pages, torrents)
+                total_torrents = requests_remaining_pages(series_id, pages, torrents)
             else:
                 total_torrents = torrents
             parsed_torrents = parse_available_torrents(total_torrents)
@@ -34,11 +35,11 @@ def search_show_by_imdb(show_id: str) -> ByIMDb:
 
             return result
         else:
-            logger.warning(f"No results for the show with IMDb ID {show_id}")
+            logger.warning(f"No results for the series with IMDb ID {series_id}")
 
             return ByIMDb()
     else:
-        logger.warning(f"No results for the show with IMDb ID {show_id}")
+        logger.warning(f"No results for the series with IMDb ID {series_id}")
 
         return ByIMDb()
 
@@ -51,11 +52,12 @@ def measure_number_pages(torrents_count: str) -> int:
     return result
 
 
-def requests_remaining_pages(show_id: str, pages: int, torrents: List[dict]) -> List[dict]:
+def requests_remaining_pages(series_id: str, pages: int, torrents: List[dict]) -> List[dict]:
     result = torrents
 
     for page in range(INITIAL_PAGE + 1, pages + 1):
-        request = requests.get(EZTV_API.format(LIMIT, page, show_id))
+        payload = {'limit': LIMIT, 'page': page, 'imdb_id': series_id}
+        request = requests.get(EZTV_API, payload)
 
         if request.status_code == 200:
             json_object = request.json()
@@ -63,7 +65,7 @@ def requests_remaining_pages(show_id: str, pages: int, torrents: List[dict]) -> 
             for remaining_torrent in remaining_torrents:
                 result.append(remaining_torrent)
         else:
-            logger.warning(f"Unable to retrieve page {page} of Torrents for the show with ID {show_id}")
+            logger.warning(f"Unable to retrieve page {page} of Torrents for the show with ID {series_id}")
 
     return result
 

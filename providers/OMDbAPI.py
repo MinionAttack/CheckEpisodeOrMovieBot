@@ -5,14 +5,14 @@ import requests
 from classes.OMDbAPI import ByName
 from resources.properties import OMDB_API_KEY
 from src.logger import logger
+from strings.find_command import INCORRECTLY_WRITTEN_NAME
 
-# http://www.omdbapi.com/?apikey=1343faf&i=tt3896198
-# http://www.omdbapi.com/?apikey=1343faf&t=the+mandalorian
-OMDB_API_URL = 'http://www.omdbapi.com/?apikey={}&t={}'
+OMDB_API_URL = 'http://www.omdbapi.com'
 
 
-def search_show_by_name(name: str) -> ByName:
-    request = requests.get(OMDB_API_URL.format(OMDB_API_KEY, name))
+def search_series_by_name(name: str) -> ByName:
+    payload = {'apikey': OMDB_API_KEY, 't': name}
+    request = requests.get(OMDB_API_URL, payload)
 
     if request.status_code == 200:
         json_object = request.json()
@@ -35,8 +35,10 @@ def search_show_by_name(name: str) -> ByName:
         else:
             error = json_object['Error']
             logger.warning(f"Error from OMDb API: {error}")
-
-            return ByName(error=True, error_message=error)
+            if error == f"Movie not found!":
+                return ByName(error=True, error_message=INCORRECTLY_WRITTEN_NAME)
+            else:
+                return ByName(error=True, error_message=error)
     else:
         logger.warning(f"Error connecting to OMDb API. The service may not be available at this time.")
 
