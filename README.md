@@ -114,7 +114,7 @@ python3 src/bot.py
 
 You can use the bot in two ways.
 
- - Accessing the official bot that runs on my personal *Raspberry Pi 3B+* in my apartment by clicking on the following link:
+ - Accessing the official instance of the bot running on my personal *Raspberry Pi 3B+* in my apartment by clicking on the following link:
 	 - [https://t.me/CheckEpisodeBot][4]
 	 - There is no guarantee that it will be working 24/7.
  - Using your own instance of the bot:
