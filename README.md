@@ -52,29 +52,37 @@ In this section you can have a quick view of the project structure.
 │   ├── info.txt
 │   ├── warn.txt
 │   └── debug.txt
+├── LICENSE
 ├── resources
 │   ├── log.yaml
 │   └── properties.py
-├── strings
-│   ├── options_command.py
-│   ├── command_handlers.py
-│   └── find_command.py
+├── requirements.txt
 ├── src
 │   ├── logger.py
 │   ├── bot.py
 │   └── command_handlers.py
-├── requirements.txt
 ├── classes
 │   ├── ConvertBytes.py
-│   ├── FindCommand.py
+│   ├── OMDbAPI.py
 │   ├── EZTV.py
-│   └── OMDbAPI.py
+│   ├── MoviesCommand.py
+│   ├── SeriesCommand.py
+│   └── YTS.py
+├── strings
+│   ├── OMDbAPI.py
+│   ├── series_command.py
+│   ├── movies_command.py
+│   ├── command_handlers.py
+│   └── options_command.py
+├── providers
+│   ├── OMDbAPI.py
+│   ├── EZTV.py
+│   └── YTS.py
 ├── actions
+│   ├── series_command.py
 │   ├── options_command.py
-│   └── find_command.py
-└── providers
-    ├── EZTV.py
-    └── OMDbAPI.py
+│   └── movies_command.py
+└── README.md
 ```
 
 Directories marked with a (*) will be created by the bot as needed.
