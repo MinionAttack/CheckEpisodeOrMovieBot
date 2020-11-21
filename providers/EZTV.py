@@ -8,7 +8,7 @@ import requests
 from classes.EZTV import ByIMDb, TorrentAvailable
 from src.logger import logger
 
-EZTV_API = 'https://eztv.re/api/get-torrents'
+EZTV_API = f"https://eztv.re/api/get-torrents"
 # Results per page, between 1 and 100
 LIMIT = 100
 INITIAL_PAGE = 1
@@ -26,10 +26,12 @@ def search_series_by_imdb(series_id: str) -> ByIMDb:
         if torrents_count > 0:
             torrents = json_object['torrents']
             pages = measure_number_pages(torrents_count)
+
             if pages > 1:
                 total_torrents = requests_remaining_pages(series_id, pages, torrents)
             else:
                 total_torrents = torrents
+
             parsed_torrents = parse_available_torrents(total_torrents)
             result = ByIMDb(imdb_id, torrents_count, parsed_torrents)
 

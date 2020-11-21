@@ -3,6 +3,7 @@
 from telegram import Update, User
 from telegram.ext import CallbackContext
 
+from actions.movies_command import process_movies_options
 from actions.options_command import get_options_details
 from actions.series_command import process_series_options
 from src.logger import logger
@@ -55,14 +56,23 @@ def series_command(update: Update, context: CallbackContext) -> None:
     message = update.effective_message.text.strip()
     available_options = process_series_options(message)
 
-    logger.info(f"Sending results to the user: {identifier}")
     photo_url = available_options.photo_url
     caption = available_options.caption
-    if photo_url != '' and caption != '':
-        update.effective_message.reply_photo(photo=photo_url, caption=SEE_RESULTS)
-        update.effective_message.reply_html(caption)
-    elif caption != '':
-        update.effective_message.reply_text(caption)
+    send_message(update, identifier, photo_url, caption)
+
+
+def movies_command(update: Update, context: CallbackContext) -> None:
+    """Sends a message when the user request to find a movie when the /movies command is issued."""
+    user_info = update.effective_message.from_user
+    identifier = get_user(user_info)
+    logger.info(f"Incoming search request from user: {identifier}")
+
+    message = update.effective_message.text.strip()
+    available_options = process_movies_options(message)
+
+    photo_url = available_options.photo_url
+    caption = available_options.caption
+    send_message(update, identifier, photo_url, caption)
 
 
 def get_user(user: User) -> str:
@@ -77,3 +87,13 @@ def get_user(user: User) -> str:
         return full_name
     else:
         return UNKNOWN_USER
+
+
+def send_message(update: Update, identifier: str, photo_url: str, caption: str) -> None:
+    logger.info(f"Sending results to the user: {identifier}")
+
+    if photo_url != '' and caption != '':
+        update.effective_message.reply_photo(photo=photo_url, caption=SEE_RESULTS)
+        update.effective_message.reply_html(caption, disable_web_page_preview=True)
+    elif caption != '':
+        update.effective_message.reply_text(caption, disable_web_page_preview=True)

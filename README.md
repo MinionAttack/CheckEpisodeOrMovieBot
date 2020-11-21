@@ -32,10 +32,10 @@ And that is why you are reading this.
 ## Requisites
 In order to use the bot it is necessary to have a compatible environment:
 
-- **Operative system**: A *Linux* or *Windows* based system where the bot will run.
-- **Python version**: The bot has been developed with version *3.8.5*. It may work with older versions, but this has not been tested.
-- **A Telegram account**: You need to have a *Telegram* account to be able to run the bot, configure the bot, access it and use it. You can create an account at the following [link][1].
-- **An OMDb API account**: You need to have an *OMDb API* account to run the bot as it is the provider of *IMDb* identifiers for series and these identifiers are used to find *Torrent* files. With a *free account* it is enough if you are not going to have a high number of requests, since this account *is limited to 1000 requests per day*. You can create an account at the following [link][2]. **Remember to validate the *API Key* by clicking the activation link in the activation email sent after completing the registration process**.
+ - **Operative system**: A *Linux* or *Windows* based system where the bot will run.
+ - **Python version**: The bot has been developed with version *3.8.5*. It may work with older versions, but this has not been tested.
+ - **A Telegram account**: You need to have a *Telegram* account to be able to run the bot, configure the bot, access it and use it. You can create an account at the following [link][1].
+ - **An OMDb API account**: You need to have an *OMDb API* account to run the bot as it is the provider of *IMDb* identifiers for series and these identifiers are used to find *Torrent* files. With a *free account* it is enough if you are not going to have a high number of requests, since this account *is limited to 1000 requests per day*. You can create an account at the following [link][2]. **Remember to validate the *API Key* by clicking the activation link in the activation email sent after completing the registration process**.
 
 [1]: https://web.telegram.org/#/login
 [2]: http://www.omdbapi.com/apikey.aspx
@@ -83,11 +83,10 @@ Directories marked with a (*) will be created by the bot as needed.
 
 This section expects the requirements stated in the previous section to be met and this is how this section has been written.
 
--   **Program dependencies**: The bot has some dependencies that must be installed in order to work. Those dependencies can be installed with the _requirements.txt_ file:
-    -   `pip install -r requirements.txt`
+ - **Program dependencies**: The bot has some dependencies that must be installed in order to work. Those dependencies can be installed with the _requirements.txt_ file: 
+	 - `pip install -r requirements.txt`
 
 **Note**: If you have both **Python 2** and **Python 3** installed on your system, use **pip3** instead of **pip**.
-
 ## Configuration
 
 There are some parameters that need to be set by the user, so the bot can work. Those parameters are in the */resources/properties.py* file.
@@ -129,7 +128,7 @@ Right now there are only four commands available:
  - **Start**: Use this command to display the welcome message.
  - **Status**: Use this command to find out if the bot is working. If you do not get a response from this command, the bot is not working.
  - **Options**: Use this command to view help text with information for all available commands.
- - **Series**: Use this command to search for available torrents on an episode of a series. There are two syntaxes, one short and one long:
+ - **Series**: Use this command to search for available torrents for an episode of a series. There are two syntaxes, one short and one long:
 	 - **Long syntax**: `/series -name name -season number -episode number -quality number`
 	 - **Short syntax**: `/series -n name -s number -e number -q number`
 	 - **Considerations to take into account**:
@@ -137,6 +136,14 @@ Right now there are only four commands available:
 		 - The available qualities are: 480 (SD), 720 (HD), 1080 (FHD) and 2160 (UHD).
 		 - The number specified for the quality must not include the scan type. If you want HD content write 720 but not 720i or 720p, the same for SD (480) content, Full HD (1080) content and Ultra HD (2160) content. **Do not include the letter**.
 		 - The details displayed in each torrent may vary depending on the name of the video file. For the same episode of a series, the details may not match because the files do not have the same structure or not all the details have been included in the file name. 
+ - **Movies**: Use this command to search for available torrents for a movie. There are two syntaxes, one short and one long:
+	- **Long syntax**: `/movies -name name -quality number`
+	 - **Short syntax**: `/movies -n name -q number`
+	- **Considerations to take into account**:
+		 - The name of the movie must be spelled the same way it is displayed on **IMDb**.
+		 - The available qualities are: 480 (SD), 720 (HD), 1080 (FHD) and 2160 (UHD).
+		 - The number specified for the quality must not include the scan type. If you want HD content write 720 but not 720i or 720p, the same for SD (480) content, Full HD (1080) content and Ultra HD (2160) content. **Do not include the letter**.
+		 - The details shown in each movie may vary depending on the information provided by the third party components.
 
 I may add new options in the future as new ideas come to mind or add more Torrents providers.
 

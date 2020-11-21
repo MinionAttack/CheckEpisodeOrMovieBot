@@ -9,7 +9,7 @@ from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 
 from resources.properties import BOT_TOKEN
-from src.command_handlers import echo, series_command, start_command, status_command, options_command
+from src.command_handlers import echo, movies_command, series_command, start_command, status_command, options_command
 from src.logger import logger
 
 
@@ -22,6 +22,7 @@ def configure_dispatcher(dispatcher):
     dispatcher.add_handler(CommandHandler('status', status_command))
     dispatcher.add_handler(CommandHandler('options', options_command))
     dispatcher.add_handler(CommandHandler('series', series_command))
+    dispatcher.add_handler(CommandHandler('movies', movies_command))
 
     # on no command message - echo the message on Telegram
     dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))

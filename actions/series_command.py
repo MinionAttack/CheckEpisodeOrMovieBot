@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
+
 from typing import List
 
 from classes.ConvertBytes import HumanBytes
 from classes.SeriesCommand import DisplayTorrentInformation, Options, SendInformation, TemplateInformation
-from classes.OMDbAPI import ByName
+from classes.OMDbAPI import SeriesByName
 from classes.EZTV import ByIMDb, TorrentAvailable
 from providers.EZTV import search_series_by_imdb
 from providers.OMDbAPI import search_series_by_name
 from resources.properties import EXTRA_QUALITY_OPTIONS, IMAGE_FORMAT, PLATFORMS, RESOLUTION_QUALITY, WEBRIP, WEB_DL
 from src.logger import logger
-from strings.series_command import INCORRECT_FORMAT_SERIES, NO_IMDB_ID_FOUND, NO_TORRENTS_FOUND, SEARCH_MOVIE_SERIES_COMMAND
+from strings.OMDbAPI import NO_IMDB_ID_FOUND
+from strings.series_command import INCORRECT_FORMAT_SERIES, NO_TORRENTS_FOUND, SEARCH_MOVIE_SERIES_COMMAND
 from strings.series_command import SERIES_CAN_CONTAIN_SUBTITLES
 
 
@@ -114,7 +116,8 @@ def check_correct_parameters(series_name: str, season: str, episode: str, qualit
 def find_episode_torrents(options: Options) -> SendInformation:
     logger.info(f"Finding IMDb series ID for: {options.series_name}")
 
-    search_result = search_series_by_name(options.series_name)
+    series_name = options.series_name
+    search_result = search_series_by_name(series_name)
     if not search_result.is_empty() and search_result.is_series():
         template_information = find_series_torrents(options, search_result)
         if not template_information.is_empty():
@@ -130,7 +133,7 @@ def find_episode_torrents(options: Options) -> SendInformation:
         return SendInformation('', f"{NO_IMDB_ID_FOUND}")
 
 
-def find_series_torrents(options: Options, search_result: ByName) -> TemplateInformation:
+def find_series_torrents(options: Options, search_result: SeriesByName) -> TemplateInformation:
     logger.info(f"Finding torrents for: {options.series_name}")
 
     parsed_imdb_id = search_result.parsed_imdb_id
@@ -255,8 +258,6 @@ def get_release_type(raw_title: str) -> str:
     logger.info(f"Recovering release type.")
 
     for name_type, options in IMAGE_FORMAT.items():
-        logger.info(f"Searching in {name_type} image format.")
-
         for option in options:
             if raw_title.find(option) != -1:
                 return option
