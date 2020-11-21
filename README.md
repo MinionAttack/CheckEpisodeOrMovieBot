@@ -53,14 +53,7 @@ In this section you can have a quick view of the project structure.
 │   ├── warn.txt
 │   └── debug.txt
 ├── LICENSE
-├── resources
-│   ├── log.yaml
-│   └── properties.py
 ├── requirements.txt
-├── src
-│   ├── logger.py
-│   ├── bot.py
-│   └── command_handlers.py
 ├── classes
 │   ├── ConvertBytes.py
 │   ├── OMDbAPI.py
@@ -68,21 +61,28 @@ In this section you can have a quick view of the project structure.
 │   ├── MoviesCommand.py
 │   ├── SeriesCommand.py
 │   └── YTS.py
-├── strings
-│   ├── OMDbAPI.py
-│   ├── series_command.py
-│   ├── movies_command.py
-│   ├── command_handlers.py
-│   └── options_command.py
 ├── providers
 │   ├── OMDbAPI.py
 │   ├── EZTV.py
 │   └── YTS.py
+├── README.md
+├── src
+│   ├── logger.py
+│   ├── command_handlers.py
+│   └── bot.py
 ├── actions
 │   ├── series_command.py
-│   ├── options_command.py
-│   └── movies_command.py
-└── README.md
+│   ├── movies_command.py
+│   └── help_command.py
+├── strings
+│   ├── OMDbAPI.py
+│   ├── command_handlers.py
+│   ├── movies_command.py
+│   ├── series_command.py
+│   └── help_command.py
+└── resources
+    ├── log.yaml
+    └── properties.py
 ```
 
 Directories marked with a (*) will be created by the bot as needed.
@@ -95,6 +95,7 @@ This section expects the requirements stated in the previous section to be met a
 	 - `pip install -r requirements.txt`
 
 **Note**: If you have both **Python 2** and **Python 3** installed on your system, use **pip3** instead of **pip**.
+
 ## Configuration
 
 There are some parameters that need to be set by the user, so the bot can work. Those parameters are in the */resources/properties.py* file.
@@ -135,7 +136,10 @@ Right now there are only four commands available:
 
  - **Start**: Use this command to display the welcome message.
  - **Status**: Use this command to find out if the bot is working. If you do not get a response from this command, the bot is not working.
- - **Options**: Use this command to view help text with information for all available commands.
+ - **Help**: Use this command to know how to use the bot. There are two types of syntax, one short and one long:
+	 - **Long syntax**: `/help -command command`
+	 - **Short syntax**: `/help -c command`
+	 - The available commands are: `start`, `status`, `help`, `series`, `movies`.
  - **Series**: Use this command to search for available torrents for an episode of a series. There are two syntaxes, one short and one long:
 	 - **Long syntax**: `/series -name name -season number -episode number -quality number`
 	 - **Short syntax**: `/series -n name -s number -e number -q number`
@@ -146,7 +150,7 @@ Right now there are only four commands available:
 		 - The details displayed in each torrent may vary depending on the name of the video file. For the same episode of a series, the details may not match because the files do not have the same structure or not all the details have been included in the file name. 
  - **Movies**: Use this command to search for available torrents for a movie. There are two syntaxes, one short and one long:
 	- **Long syntax**: `/movies -name name -quality number`
-	 - **Short syntax**: `/movies -n name -q number`
+	- **Short syntax**: `/movies -n name -q number`
 	- **Considerations to take into account**:
 		 - The name of the movie must be spelled the same way it is displayed on **IMDb**.
 		 - The available qualities are: 480 (SD), 720 (HD), 1080 (FHD) and 2160 (UHD).

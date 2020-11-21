@@ -2,11 +2,15 @@
 
 BOT_TOKEN = ''
 
+OMDB_API_KEY = ''
+
+# DOT NOT MODIFY THE BELOW PROPERTIES UNLESS YOU ARE DEVELOPING THE BOT #
+
 LOGS_FOLDER = 'logs'
 
 LOGS_MODE = 'development'
 
-OMDB_API_KEY = ''
+AVAILABLE_HELP_COMMANDS = ['start', 'status', 'help', 'series', 'movies']
 
 RESOLUTION_QUALITY = ['480p', '720p', '1080p', '2160p']
 

@@ -3,8 +3,8 @@
 from telegram import Update, User
 from telegram.ext import CallbackContext
 
+from actions.help_command import process_help_options
 from actions.movies_command import process_movies_options
-from actions.options_command import get_options_details
 from actions.series_command import process_series_options
 from src.logger import logger
 from strings.command_handlers import SEE_RESULTS, STATUS_COMMAND, UNKNOWN_USER, WELCOME_START_COMMAND, WRONG_FORMAT_ECHO_COMMAND
@@ -28,14 +28,15 @@ def status_command(update: Update, context: CallbackContext) -> None:
     update.effective_message.reply_text(STATUS_COMMAND)
 
 
-def options_command(update: Update, context: CallbackContext) -> None:
-    """Sends a message of all available commands and how to use each of them when the /options command is issued."""
+def help_command(update: Update, context: CallbackContext) -> None:
+    """Sends a message of how to use a specific command when the /help command is issued."""
     user_info = update.effective_message.from_user
     identifier = get_user(user_info)
-    logger.info(f"List of commands and how to use them requested by the user: {identifier}")
+    logger.info(f"Help on how to use a command requested by the user: {identifier}")
 
-    options_details = get_options_details()
-    update.effective_message.reply_html(options_details)
+    message = update.effective_message.text.strip()
+    help_text = process_help_options(message)
+    update.effective_message.reply_html(help_text)
 
 
 def echo(update: Update, context: CallbackContext) -> None:

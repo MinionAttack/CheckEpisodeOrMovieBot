@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-INCORRECT_FORMAT_MOVIES = f"Incorrect format, see the /options command for more details. \U0001F635"
+INCORRECT_FORMAT_MOVIES = f"Incorrect format, see the /help command for more details. \U0001F635"
 
 NO_TORRENTS_FOUND = f"No torrent results found. \U0001F61E"
 

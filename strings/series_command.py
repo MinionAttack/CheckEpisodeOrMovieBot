@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-INCORRECT_FORMAT_SERIES = f"Incorrect format, see the /options command for more details. \U0001F635"
+INCORRECT_FORMAT_SERIES = f"Incorrect format, see the /help command for more details. \U0001F635"
 
 SEARCH_MOVIE_SERIES_COMMAND = f"You are trying to search for a movie with the command for series. \U0001F928"
 
