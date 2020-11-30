@@ -53,36 +53,41 @@ In this section you can have a quick view of the project structure.
 │   ├── warn.txt
 │   └── debug.txt
 ├── LICENSE
+├── README.md
 ├── requirements.txt
+├── providers
+│   ├── EZTV.py
+│   ├── OMDbAPI.py
+│   ├── YTS.py
+│   └── YIFY.py
 ├── classes
 │   ├── ConvertBytes.py
-│   ├── OMDbAPI.py
 │   ├── EZTV.py
-│   ├── MoviesCommand.py
+│   ├── YTS.py
 │   ├── SeriesCommand.py
-│   └── YTS.py
-├── providers
 │   ├── OMDbAPI.py
-│   ├── EZTV.py
-│   └── YTS.py
-├── README.md
+│   ├── YIFY.py
+│   ├── MoviesCommand.py
+│   └──SubtitlesCommand.py
 ├── src
+│   ├── bot.py
 │   ├── logger.py
-│   ├── command_handlers.py
-│   └── bot.py
-├── actions
-│   ├── series_command.py
-│   ├── movies_command.py
-│   └── help_command.py
+│   └── command_handlers.py
+├── resources
+│   ├── log.yaml
+│   └──properties.py
 ├── strings
-│   ├── OMDbAPI.py
 │   ├── command_handlers.py
+│   ├── OMDbAPI.py
 │   ├── movies_command.py
 │   ├── series_command.py
+│   ├── subtitles_command.py
 │   └── help_command.py
-└── resources
-    ├── log.yaml
-    └── properties.py
+└── actions
+    ├── movies_command.py
+    ├── series_command.py
+    ├── subtitles_command.py
+    └── help_command.py
 ```
 
 Directories marked with a (*) will be created by the bot as needed.
@@ -156,10 +161,16 @@ Right now there are only four commands available:
 		 - The available qualities are: 480 (SD), 720 (HD), 1080 (FHD) and 2160 (UHD).
 		 - The number specified for the quality must not include the scan type. If you want HD content write 720 but not 720i or 720p, the same for SD (480) content, Full HD (1080) content and Ultra HD (2160) content. **Do not include the letter**.
 		 - The details shown in each movie may vary depending on the information provided by the third party components.
+ - **Subtitles**: Use this command to find the subtitles for a specific movie. There are two types of syntax, one short and one long:
+	 - **Long syntax**: `/subtitles -movie name -language language -limit number`
+	 - **Short syntax**: `/subtitles -m name -la language -li number`
+	 - **Considerations to take into account**:
+		 - The name of the movie must be spelled the same way it is displayed on **IMDb**.
+		 - The available languages are: Albanian, Arabic, Armenian, Bengali, Bosnian, Brazilian Portuguese, Bulgarian, Burmese, Chinese, Croatian, Czech, Danish, Dutch, English, Estonian, Farsi/Persian (Same results), Finnish, French, German, Greek, Hebrew, Hindi, Hungarian, Icelandic, Indonesian, Italian, Japanese, Korean, Lithuanian, Macedonian, Malay, Malayalam, Nepali, Norwegian, Pashto, Polish, Portuguese, Romanian, Russian, Serbian, Slovak, Slovenian, Spanish, Swedish, Tamil, Telugu, Thai, Turkish, Ukrainian, Urdu, Vietnamese.
+		 - The number specified for the limit indicates how many results will be displayed. **This parameter is optional**, by default the first 5 results with the highest score are shown.
+		 - **Be careful when specifying a limit**. Do this only if the default value is not enough to find a valid subtitle because in some movies there are languages with LOTS of options available (in some cases close to 80 possibilities), so specifying a higher limit could result in receiving a large number of very long messages.
 
-I may add new options in the future as new ideas come to mind or add more Torrents providers.
-
-[4]: https://t.me/CheckEpisodeBot
+[4]: https://t.me/CheckEpisodeOrMovieBot
 
 ## Special thanks
 

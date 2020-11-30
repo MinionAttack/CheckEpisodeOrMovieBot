@@ -8,12 +8,12 @@ import requests
 from classes.YTS import ByIMDb, TorrentAvailable
 from src.logger import logger
 
-YTS_API = f"https://yts.mx/api/v2/list_movies.json"
+YTS_API = 'https://yts.mx/api/v2/list_movies.json'
 # Results per page, between 1 and 50, default is 20.
 LIMIT = 50
 INITIAL_PAGE = 1
 
-YOUTUBE_URL = f"https://www.youtube.com/watch?v="
+YOUTUBE_URL = 'https://www.youtube.com/watch?v='
 
 
 def search_movie_by_imdb(movie_id: str, quality_specified: str) -> ByIMDb:
@@ -25,7 +25,7 @@ def search_movie_by_imdb(movie_id: str, quality_specified: str) -> ByIMDb:
         status = json_object['status']
         status_message = json_object['status_message']
 
-        if status == f"ok":
+        if status == 'ok':
             data = json_object['data']
             movie_count = data['movie_count']
             movies_available = data['movies']
@@ -42,12 +42,12 @@ def search_movie_by_imdb(movie_id: str, quality_specified: str) -> ByIMDb:
                 return parsed_movies
             else:
                 return ByIMDb()
-        elif status == f"error":
+        elif status == 'error':
             logger.warning(f"The YTS API has returned an error for movie with IMDb ID {movie_id}: {status_message}")
 
             return ByIMDb()
     else:
-        logger.warning(f"No results for movie with IMDb ID {movie_id}")
+        logger.warning(f"Error connecting to YTS API. The service may not be available at this time.")
 
         return ByIMDb()
 
@@ -72,12 +72,12 @@ def requests_remaining_pages(movie_id: str, pages: int, movies: List[dict]) -> L
             status = json_object['status']
             status_message = json_object['status_message']
 
-            if status == f"ok":
+            if status == 'ok':
                 data = json_object['data']
                 remaining_movies = data['movies']
                 for remaining_movie in remaining_movies:
                     result.append(remaining_movie)
-            elif status == f"error":
+            elif status == 'error':
                 logger.warning(f"The YTS API has returned an error fetching the page {page} for the movie with IMDb ID {movie_id}: "
                                f"{status_message}")
         else:
@@ -109,9 +109,9 @@ def parse_available_movies(movies: List[dict], quality_specified) -> ByIMDb:
             large_cover_image = movie['large_cover_image']
             raw_torrents = movie['torrents']
             torrents = parse_torrents(raw_torrents, quality_specified)
+
             option = ByIMDb(imdb_code, title, year, rating, runtime, genres, synopsis, youtube_trailer, language, mpa_rating,
-                            large_cover_image,
-                            torrents)
+                            large_cover_image, torrents)
             result = option
 
         return result
@@ -120,7 +120,7 @@ def parse_available_movies(movies: List[dict], quality_specified) -> ByIMDb:
 
 
 def parse_genre(genres: List[str]) -> str:
-    result = f""
+    result = ''
 
     for genre in genres:
         result = result + f"{genre}/"
@@ -148,6 +148,7 @@ def parse_torrents(torrents: List, quality_specified: str) -> List[TorrentAvaila
             seeds = torrent['seeds']
             peers = torrent['peers']
             size_bytes = torrent['size_bytes']
+
             option = TorrentAvailable(torrent_url, quality, release_type, seeds, peers, size_bytes)
             result.append(option)
 

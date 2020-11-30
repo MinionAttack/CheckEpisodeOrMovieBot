@@ -8,7 +8,7 @@ import requests
 from classes.EZTV import ByIMDb, TorrentAvailable
 from src.logger import logger
 
-EZTV_API = f"https://eztv.re/api/get-torrents"
+EZTV_API = 'https://eztv.re/api/get-torrents'
 # Results per page, between 1 and 100
 LIMIT = 100
 INITIAL_PAGE = 1
@@ -41,7 +41,7 @@ def search_series_by_imdb(series_id: str) -> ByIMDb:
 
             return ByIMDb()
     else:
-        logger.warning(f"No results for the series with IMDb ID {series_id}")
+        logger.warning('Error connecting to EZTV API. The service may not be available at this time.')
 
         return ByIMDb()
 
@@ -86,8 +86,8 @@ def parse_available_torrents(torrents: List[dict]) -> List[TorrentAvailable]:
         peers = torrent['peers']
         size_bytes = torrent['size_bytes']
         size = int(size_bytes)
-        torrent = TorrentAvailable(filename, torrent_url, magnet_url, title, season, episode, seeds, peers, size)
 
+        torrent = TorrentAvailable(filename, torrent_url, magnet_url, title, season, episode, seeds, peers, size)
         result.append(torrent)
 
     return result

@@ -8,8 +8,7 @@ from providers.OMDbAPI import search_movie_by_name
 from providers.YTS import search_movie_by_imdb
 from resources.properties import IMAGE_FORMAT, RESOLUTION_QUALITY
 from src.logger import logger
-from strings.OMDbAPI import NO_IMDB_ID_FOUND
-from strings.movies_command import INCORRECT_FORMAT_MOVIES, SEARCH_SERIES_MOVIE_COMMAND, NO_TORRENTS_FOUND
+from strings.movies_command import INCORRECT_MOVIES_FORMAT, SEARCH_SERIES_MOVIE_COMMAND, NO_IMDB_ID_FOUND, NO_TORRENTS_FOUND
 
 
 def process_movies_options(message: str) -> SendInformation:
@@ -31,7 +30,7 @@ def process_movies_options(message: str) -> SendInformation:
         options = Options(movie_name, quality)
         query_result = find_movie_torrents(options)
     else:
-        query_result = SendInformation('', f"{INCORRECT_FORMAT_MOVIES}")
+        query_result = SendInformation('', f"{INCORRECT_MOVIES_FORMAT}")
 
     return query_result
 
@@ -106,7 +105,7 @@ def find_yts_torrents(options: Options, search_result: MovieByName) -> ByIMDb:
 
 
 def generate_template_information(movies_data: ByIMDb) -> DisplayMovieInformation:
-    logger.info(f"Generating template information.")
+    logger.info('Generating template information.')
 
     title = movies_data.title
     year = movies_data.year
@@ -145,10 +144,10 @@ def parse_release_type(release_type: str) -> str:
 
 
 def generate_template(template_information: DisplayMovieInformation) -> SendInformation:
-    logger.info(f"Generating message with format for Telegram.")
+    logger.info('Generating message with format for Telegram.')
 
     torrents = template_information.torrents
-    text_template = f""
+    text_template = ''
 
     text_template = text_template + f"<strong>Title:</strong> {template_information.title}\n"
     text_template = text_template + f"<strong>Year:</strong> {template_information.year}\n"

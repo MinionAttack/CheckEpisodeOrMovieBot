@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+
 from resources.properties import AVAILABLE_HELP_COMMANDS
 from src.logger import logger
-from strings.help_command import INCORRECT_FORMAT_HELP, MOVIES_COMMAND_TEXT, HELP_COMMAND_TEXT, SERIES_COMMAND_TEXT, START_COMMAND_TEXT
-from strings.help_command import STATUS_COMMAND_TEXT
+from strings.help_command import INCORRECT_HELP_FORMAT, MOVIES_COMMAND_TEXT, HELP_COMMAND_TEXT, SERIES_COMMAND_TEXT, START_COMMAND_TEXT
+from strings.help_command import STATUS_COMMAND_TEXT, SUBTITLES_COMMAND_TEXT
 
 
 def process_help_options(message: str) -> str:
@@ -13,7 +14,6 @@ def process_help_options(message: str) -> str:
     if not parameters:
         return HELP_COMMAND_TEXT
     else:
-        command = ''
         for parameter in parameters:
             parameter = parameter.strip()
 
@@ -22,7 +22,7 @@ def process_help_options(message: str) -> str:
                 help_text = get_command_help(command)
                 return help_text
             else:
-                return INCORRECT_FORMAT_HELP
+                return INCORRECT_HELP_FORMAT
 
 
 def parse_command(parameter: str) -> str:
@@ -39,61 +39,82 @@ def parse_command(parameter: str) -> str:
 def get_command_help(command: str) -> str:
     logger.info(f"Getting help message for command: {command}")
 
-    functions = {'start': generate_start_text(), 'status': generate_status_text(), 'help': generate_help_text(),
-                 'series': generate_series_text(), 'movies': generate_movies_text()}
-
     if command in AVAILABLE_HELP_COMMANDS:
-        command_help = functions[command]
-        return command_help
+        if command == 'start':
+            help_text = generate_start_text()
+        elif command == 'status':
+            help_text = generate_status_text()
+        elif command == 'help':
+            help_text = generate_help_text()
+        elif command == 'series':
+            help_text = generate_series_text()
+        elif command == 'movies':
+            help_text = generate_movies_text()
+        elif command == 'subtitles':
+            help_text = generate_subtitles_text()
+        else:
+            return INCORRECT_HELP_FORMAT
+
+        return help_text
     else:
-        return INCORRECT_FORMAT_HELP
+        return INCORRECT_HELP_FORMAT
 
 
 def generate_start_text() -> str:
-    logger.info(f"Generating start command text.")
+    logger.info('Generating start command text.')
 
-    text = f"<strong><u>Start command</u></strong>\n"
-    text = text + f"\n"
+    text = '<strong><u>Start command</u></strong>\n'
+    text = text + '\n'
     text = text + START_COMMAND_TEXT
 
     return text
 
 
 def generate_status_text() -> str:
-    logger.info(f"Generating status command text.")
+    logger.info('Generating status command text.')
 
-    text = f"<strong><u>Status command</u></strong>\n"
-    text = text + f"\n"
+    text = '<strong><u>Status command</u></strong>\n'
+    text = text + '\n'
     text = text + STATUS_COMMAND_TEXT
 
     return text
 
 
 def generate_help_text() -> str:
-    logger.info(f"Generating help command text.")
+    logger.info('Generating help command text.')
 
-    text = f"<strong><u>Help command</u></strong>\n"
-    text = text + f"\n"
+    text = '<strong><u>Help command</u></strong>\n'
+    text = text + '\n'
     text = text + HELP_COMMAND_TEXT
 
     return text
 
 
 def generate_series_text() -> str:
-    logger.info(f"Generating series command text.")
+    logger.info('Generating series command text.')
 
-    text = f"<strong><u>Series command</u></strong>\n"
-    text = text + f"\n"
+    text = '<strong><u>Series command</u></strong>\n'
+    text = text + '\n'
     text = text + SERIES_COMMAND_TEXT
 
     return text
 
 
 def generate_movies_text() -> str:
-    logger.info(f"Generating movies command text.")
+    logger.info('Generating movies command text.')
 
-    text = f"<strong><u>Movies command</u></strong>\n"
-    text = text + f"\n"
+    text = '<strong><u>Movies command</u></strong>\n'
+    text = text + '\n'
     text = text + MOVIES_COMMAND_TEXT
+
+    return text
+
+
+def generate_subtitles_text() -> str:
+    logger.info('Generating subtitles command text.')
+
+    text = '<strong><u>Subtitles command</u></strong>\n'
+    text = text + '\n'
+    text = text + SUBTITLES_COMMAND_TEXT
 
     return text

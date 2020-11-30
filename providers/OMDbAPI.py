@@ -28,12 +28,12 @@ def search_series_by_name(name: str) -> SeriesByName:
         else:
             error = json_object['Error']
             logger.warning(f"Error from OMDb API: {error}")
-            if error == f"Movie not found!":
+            if error == 'Movie not found!':
                 return SeriesByName(error=True, error_message=INCORRECTLY_WRITTEN_NAME)
             else:
                 return SeriesByName(error=True, error_message=error)
     else:
-        logger.warning(f"Error connecting to OMDb API. The service may not be available at this time.")
+        logger.warning('Error connecting to OMDb API. The service may not be available at this time.')
 
         return SeriesByName()
 
@@ -45,6 +45,7 @@ def get_series_data(json_object: dict) -> SeriesByName:
     imdb_id = json_object['imdbID']
     parsed_imdb_id = imdb_id[2:10]
     content_type = json_object['Type']
+
     result = SeriesByName(title, poster_url, seasons, imdb_id, parsed_imdb_id, content_type)
 
     return result
@@ -68,12 +69,12 @@ def search_movie_by_name(name: str) -> MovieByName:
         else:
             error = json_object['Error']
             logger.warning(f"Error from OMDb API: {error}")
-            if error == f"Movie not found!":
+            if error == 'Movie not found!':
                 return MovieByName(error=True, error_message=INCORRECTLY_WRITTEN_NAME)
             else:
                 return MovieByName(error=True, error_message=error)
     else:
-        logger.warning(f"Error connecting to OMDb API. The service may not be available at this time.")
+        logger.warning('Error connecting to OMDb API. The service may not be available at this time.')
 
         return MovieByName()
 
@@ -83,6 +84,7 @@ def get_movie_data(json_object: dict) -> MovieByName:
     poster_url = json_object['Poster']
     imdb_id = json_object['imdbID']
     content_type = json_object['Type']
+
     result = MovieByName(title, poster_url, imdb_id, content_type)
 
     return result
