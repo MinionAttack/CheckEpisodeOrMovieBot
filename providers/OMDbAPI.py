@@ -7,7 +7,7 @@ from resources.properties import OMDB_API_KEY
 from src.logger import logger
 from strings.OMDbAPI import INCORRECTLY_WRITTEN_NAME
 
-OMDB_API_URL = 'http://www.omdbapi.com'
+OMDB_API_URL = 'https://www.omdbapi.com/'
 
 
 def search_series_by_name(name: str) -> SeriesByName:
