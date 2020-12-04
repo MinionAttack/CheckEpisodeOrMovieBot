@@ -68,14 +68,14 @@ In this section you can have a quick view of the project structure.
 │   ├── OMDbAPI.py
 │   ├── YIFY.py
 │   ├── MoviesCommand.py
-│   └──SubtitlesCommand.py
+│   └── SubtitlesCommand.py
 ├── src
 │   ├── bot.py
 │   ├── logger.py
 │   └── command_handlers.py
 ├── resources
 │   ├── log.yaml
-│   └──properties.py
+│   └── properties.py
 ├── strings
 │   ├── command_handlers.py
 │   ├── OMDbAPI.py
