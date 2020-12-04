@@ -98,6 +98,17 @@ This section expects the requirements stated in the previous section to be met a
 
 - **Program dependencies**: The bot has some dependencies that must be installed in order to work. Those dependencies can be installed with the _requirements.txt_ file:
 	- `pip install -r requirements.txt`
+- It is highly recommended to use a **virtual environment** (*venv*), so the bot dependencies installation will not conflict with the packages installed on the system.
+
+If you want to run the bot in a *venv*, open a terminal in the project's root folder and run:
+```
+source path_to_your_virtual_environment/bin/activate
+pip install -r requirements.txt
+```
+If you do not want to run the bot in a *venv*, open a terminal in the project's root folder and run:
+```
+pip install -r requirements.txt
+```
 
 **Note**: If you have both **Python 2** and **Python 3** installed on your system, use **pip3** instead of **pip**.
 
@@ -112,17 +123,6 @@ There are some parameters that need to be set by the user, so the bot can work. 
 
 There are other properties in the file, but they should not be changed unless you know what you are doing or if you want to continue with the development of the bot.
 
-It is highly recommended to use a **virtual environment** (*venv*), so the bot dependencies installation will not conflict with the packages installed on the system.
-
-If you want to run the bot in a *venv*, open a terminal in the project's root folder and run:
-```
-source path_to_your_virtual_environment/bin/activate
-python3 src/bot.py
-```
-If you do not want to run the bot in a *venv*, open a terminal in the project's root folder and run:
-```
-python3 src/bot.py
-```
 ## How to use
 
 You can use the bot in two ways.
@@ -131,6 +131,7 @@ You can use the bot in two ways.
 	- [https://t.me/CheckEpisodeOrMovieBot][4]
 	- There is no guarantee that it will be working 24/7.
 - Using your own instance of the bot:
+	- Remember to activate the *venv* if you are using it.
 	- Add the root folder of the bot to *Python*'s path variable:
 		- `export PYTHONPATH=$PYTHONPATH:/full/path/bot/root/folder/`
 	- Go to the `src` folder of the project and grant execute permissions to `bot.py` file:
@@ -139,7 +140,7 @@ You can use the bot in two ways.
 		- `python3 bot.py`
 	- To stop the bot just press `Control + C`.
 
-Right now there are only four commands available:
+Right now there are only six commands available:
 
 - **Start**: Use this command to display the welcome message.
 - **Status**: Use this command to find out if the bot is working. If you do not get a response from this command, the bot is not working.
