@@ -47,9 +47,14 @@ def find_language_rows(content: str, language: str):
     rows = []
     for cell in language_cells:
         language_text = cell.text_content().lower()
-        if language in language_text:
-            row = cell.getparent().getparent()
-            rows.append(row)
+        if "/" not in language_text:
+            if language == language_text:
+                row = cell.getparent().getparent()
+                rows.append(row)
+        else:
+            if language in language_text:
+                row = cell.getparent().getparent()
+                rows.append(row)
 
     return rows
 
