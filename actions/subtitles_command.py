@@ -134,8 +134,8 @@ def find_yify_subtitles(options: Options, search_result: MovieByName) -> List[By
     logger.info(f"Finding YIFY subtitles for: {options.movie}")
 
     imdb_id = search_result.imdb_id
-    language_code = options.language_code
-    available_results = search_subtitles_by_imdb(imdb_id, language_code)
+    language = options.language
+    available_results = search_subtitles_by_imdb(imdb_id, language)
 
     return available_results
 
