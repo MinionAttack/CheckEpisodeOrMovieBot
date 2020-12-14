@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from typing import List
+from typing import Any, List
 
 import requests
 from lxml.cssselect import CSSSelector
@@ -25,9 +25,9 @@ def search_subtitles_by_imdb(movie_id: str, language: str) -> List[ByIMDb]:
     movie_url = YIFY_API + movie_id
     # The User-Agent has to be specified to avoid the "requests.exceptions.TooManyRedirects" exception.
     headers = {'User-Agent': BROWSER_USER_AGENT}
-    request = requests.get(url=movie_url, headers=headers)
+    request = handle_request(movie_url, headers)
 
-    if request.status_code == 200:
+    if (request is not None) and (request.status_code == 200):
         content = request.text
         language_rows = find_language_rows(content, language)
         available_subtitles = get_subtitles_details(language_rows)
@@ -37,6 +37,26 @@ def search_subtitles_by_imdb(movie_id: str, language: str) -> List[ByIMDb]:
         logger.warning('Error connecting to YIFY API. The service may not be available at this time.')
 
         return []
+
+
+def handle_request(movie_url: str, headers: dict) -> Any:
+    try:
+        request = requests.get(url=movie_url, headers=headers)
+        request.raise_for_status()
+
+        return request
+    except requests.exceptions.HTTPError as http_error:
+        logger.warning(f"Http Error: {http_error}")
+    except requests.exceptions.ConnectionError as connection_error:
+        logger.warning(f"Error Connecting: {connection_error}")
+    except requests.exceptions.TooManyRedirects as redirects_error:
+        logger.warning(f"Too Many Redirects: {redirects_error}")
+    except requests.exceptions.Timeout as timeout_error:
+        logger.warning(f"Timeout Error: {timeout_error}")
+    except requests.exceptions.RequestException as request_exception:
+        logger.warning(f"Error: {request_exception}")
+
+    return None
 
 
 def find_language_rows(content: str, language: str):

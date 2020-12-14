@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from math import ceil
-from typing import List
+from typing import Any, List
 
 import requests
 
@@ -18,9 +18,9 @@ YOUTUBE_URL = 'https://www.youtube.com/watch?v='
 
 def search_movie_by_imdb(movie_id: str, quality_specified: str) -> ByIMDb:
     payload = {'limit': LIMIT, 'page': INITIAL_PAGE, 'query_term': movie_id}
-    request = requests.get(YTS_API, payload)
+    request = handle_request(YTS_API, payload)
 
-    if request.status_code == 200:
+    if (request is not None) and (request.status_code == 200):
         json_object = request.json()
         status = json_object['status']
         status_message = json_object['status_message']
@@ -36,7 +36,7 @@ def search_movie_by_imdb(movie_id: str, quality_specified: str) -> ByIMDb:
             else:
                 total_movies = movies_available
 
-            parsed_movies = parse_available_movies(total_movies,quality_specified)
+            parsed_movies = parse_available_movies(total_movies, quality_specified)
 
             if parsed_movies.torrents:
                 return parsed_movies
@@ -52,6 +52,26 @@ def search_movie_by_imdb(movie_id: str, quality_specified: str) -> ByIMDb:
         return ByIMDb()
 
 
+def handle_request(api_url: str, parameters: dict) -> Any:
+    try:
+        request = requests.get(api_url, parameters)
+        request.raise_for_status()
+
+        return request
+    except requests.exceptions.HTTPError as http_error:
+        logger.warning(f"Http Error: {http_error}")
+    except requests.exceptions.ConnectionError as connection_error:
+        logger.warning(f"Error Connecting: {connection_error}")
+    except requests.exceptions.TooManyRedirects as redirects_error:
+        logger.warning(f"Too Many Redirects: {redirects_error}")
+    except requests.exceptions.Timeout as timeout_error:
+        logger.warning(f"Timeout Error: {timeout_error}")
+    except requests.exceptions.RequestException as request_exception:
+        logger.warning(f"Error: {request_exception}")
+
+    return None
+
+
 def measure_number_pages(movie_count: str) -> int:
     torrents_number = int(movie_count)
 
@@ -65,9 +85,9 @@ def requests_remaining_pages(movie_id: str, pages: int, movies: List[dict]) -> L
 
     for page in range(INITIAL_PAGE + 1, pages + 1):
         payload = {'limit': LIMIT, 'page': page, 'query_term': movie_id}
-        request = requests.get(YTS_API, payload)
+        request = handle_request(YTS_API, payload)
 
-        if request.status_code == 200:
+        if (request is not None) and (request.status_code == 200):
             json_object = request.json()
             status = json_object['status']
             status_message = json_object['status_message']

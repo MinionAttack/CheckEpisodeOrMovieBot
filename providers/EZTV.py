@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from math import ceil
-from typing import List
+from typing import Any, List
 
 import requests
 
@@ -16,9 +16,9 @@ INITIAL_PAGE = 1
 
 def search_series_by_imdb(series_id: str) -> ByIMDb:
     payload = {'limit': LIMIT, 'page': INITIAL_PAGE, 'imdb_id': series_id}
-    request = requests.get(EZTV_API, payload)
+    request = handle_request(EZTV_API, payload)
 
-    if request.status_code == 200:
+    if (request is not None) and (request.status_code == 200):
         json_object = request.json()
 
         imdb_id = json_object['imdb_id']
@@ -46,6 +46,26 @@ def search_series_by_imdb(series_id: str) -> ByIMDb:
         return ByIMDb()
 
 
+def handle_request(api_url: str, parameters: dict) -> Any:
+    try:
+        request = requests.get(api_url, parameters)
+        request.raise_for_status()
+
+        return request
+    except requests.exceptions.HTTPError as http_error:
+        logger.warning(f"Http Error: {http_error}")
+    except requests.exceptions.ConnectionError as connection_error:
+        logger.warning(f"Error Connecting: {connection_error}")
+    except requests.exceptions.TooManyRedirects as redirects_error:
+        logger.warning(f"Too Many Redirects: {redirects_error}")
+    except requests.exceptions.Timeout as timeout_error:
+        logger.warning(f"Timeout Error: {timeout_error}")
+    except requests.exceptions.RequestException as request_exception:
+        logger.warning(f"Error: {request_exception}")
+
+    return None
+
+
 def measure_number_pages(torrents_count: str) -> int:
     torrents_number = int(torrents_count)
 
@@ -59,9 +79,9 @@ def requests_remaining_pages(series_id: str, pages: int, torrents: List[dict]) -
 
     for page in range(INITIAL_PAGE + 1, pages + 1):
         payload = {'limit': LIMIT, 'page': page, 'imdb_id': series_id}
-        request = requests.get(EZTV_API, payload)
+        request = handle_request(EZTV_API, payload)
 
-        if request.status_code == 200:
+        if (request is not None) and (request.status_code == 200):
             json_object = request.json()
             remaining_torrents = json_object['torrents']
             for remaining_torrent in remaining_torrents:

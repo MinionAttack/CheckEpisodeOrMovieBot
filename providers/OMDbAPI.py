@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from typing import Any
+
 import requests
 
 from classes.OMDbAPI import MovieByName, SeriesByName
@@ -12,9 +14,9 @@ OMDB_API_URL = 'https://www.omdbapi.com/'
 
 def search_series_by_name(name: str) -> SeriesByName:
     payload = {'apikey': OMDB_API_KEY, 't': name}
-    request = requests.get(OMDB_API_URL, payload)
+    request = handle_request(OMDB_API_URL, payload)
 
-    if request.status_code == 200:
+    if (request is not None) and (request.status_code == 200):
         json_object = request.json()
         response = json_object['Response']
 
@@ -38,6 +40,26 @@ def search_series_by_name(name: str) -> SeriesByName:
         return SeriesByName()
 
 
+def handle_request(api_url: str, parameters: dict) -> Any:
+    try:
+        request = requests.get(api_url, parameters)
+        request.raise_for_status()
+
+        return request
+    except requests.exceptions.HTTPError as http_error:
+        logger.warning(f"Http Error: {http_error}")
+    except requests.exceptions.ConnectionError as connection_error:
+        logger.warning(f"Error Connecting: {connection_error}")
+    except requests.exceptions.TooManyRedirects as redirects_error:
+        logger.warning(f"Too Many Redirects: {redirects_error}")
+    except requests.exceptions.Timeout as timeout_error:
+        logger.warning(f"Timeout Error: {timeout_error}")
+    except requests.exceptions.RequestException as request_exception:
+        logger.warning(f"Error: {request_exception}")
+
+    return None
+
+
 def get_series_data(json_object: dict) -> SeriesByName:
     title = json_object['Title']
     poster_url = json_object['Poster']
@@ -53,9 +75,9 @@ def get_series_data(json_object: dict) -> SeriesByName:
 
 def search_movie_by_name(name: str) -> MovieByName:
     payload = {'apikey': OMDB_API_KEY, 't': name}
-    request = requests.get(OMDB_API_URL, payload)
+    request = handle_request(OMDB_API_URL, payload)
 
-    if request.status_code == 200:
+    if (request is not None) and (request.status_code == 200):
         json_object = request.json()
         response = json_object['Response']
 
