@@ -3,9 +3,9 @@
 from typing import List
 
 from classes.ConvertBytes import HumanBytes
-from classes.SeriesCommand import DisplayTorrentInformation, Options, SendInformation, TemplateInformation
-from classes.OMDbAPI import SeriesByName
 from classes.EZTV import ByIMDb, TorrentAvailable
+from classes.OMDbAPI import SeriesByName
+from classes.SeriesCommand import DisplayTorrentInformation, Options, SendInformation, TemplateInformation
 from providers.EZTV import search_series_by_imdb
 from providers.OMDbAPI import search_series_by_name
 from resources.properties import EXTRA_QUALITY_OPTIONS, IMAGE_FORMAT, PLATFORMS, RESOLUTION_QUALITY, WEBRIP, WEB_DL
@@ -274,7 +274,11 @@ def get_scene(raw_title: str) -> str:
     logger.info(f"Recovering scene.")
 
     pieces = raw_title.split(' ')
-    scene = pieces[-2].split('-')[1]
+    piece = pieces[-2]
+    if '-' in piece:
+        scene = piece.split('-')[1]
+    else:
+        scene = ''
 
     return scene
 
