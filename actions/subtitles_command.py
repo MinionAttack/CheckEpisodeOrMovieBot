@@ -225,6 +225,3 @@ def join_remaining_parts(remaining_parts: List[str]) -> List[str]:
             temp_text = temp_text + remaining_part
 
     return result
-# https://yts-subs.com/movie-imdb/tt4154796
-# https://yts-subs.com/movie-imdb/tt4823776
-# https://yts-subs.com/movie-imdb/tt0499549
