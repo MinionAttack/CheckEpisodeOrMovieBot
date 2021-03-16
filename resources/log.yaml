@@ -1,5 +1,4 @@
 version: 1
-disable_existing_loggers: true
 
 formatters:
   standard:
@@ -10,73 +9,65 @@ formatters:
 handlers:
   console:
     class: logging.StreamHandler
+    formatter: standard
     level: DEBUG
-    formatter: standard
-    stream: ext://sys.stdout
-
-  critical_file_handler:
-    class: logging.handlers.RotatingFileHandler
-    level: CRITICAL
-    formatter: standard
-    filename: ./logs/critical.txt
-    maxBytes: 10485760 # 10MB
-    backupCount: 20
-    encoding: utf8
-    mode: a
 
   debug_file_handler:
     class: logging.handlers.RotatingFileHandler
-    level: DEBUG
     formatter: standard
-    filename: ./logs/debug.txt
-    maxBytes: 10485760 # 10MB
-    backupCount: 20
+    level: DEBUG
+    filename: logs/debug.log
     encoding: utf8
-    mode: a
-
-  error_file_handler:
-    class: logging.handlers.RotatingFileHandler
-    level: ERROR
-    formatter: error
-    filename: ./logs/errors.txt
+    mode: "w"
     maxBytes: 10485760 # 10MB
-    backupCount: 20
-    encoding: utf8
-    mode: a
+    backupCount: 1
 
   info_file_handler:
     class: logging.handlers.RotatingFileHandler
+    formatter: standard
     level: INFO
-    formatter: standard
-    filename: ./logs/info.txt
-    maxBytes: 10485760 # 10MB
-    backupCount: 20
+    filename: logs/info.log
     encoding: utf8
-    mode: a
+    mode: "w"
+    maxBytes: 10485760 # 10MB
+    backupCount: 1
 
-  warn_file_handler:
+  warning_file_handler:
     class: logging.handlers.RotatingFileHandler
-    level: WARN
     formatter: standard
-    filename: ./logs/warn.txt
-    maxBytes: 10485760 # 10MB
-    backupCount: 20
+    level: WARNING
+    filename: logs/warning.log
     encoding: utf8
-    mode: a
+    mode: "w"
+    maxBytes: 10485760 # 10MB
+    backupCount: 1
 
-root:
-  level: NOTSET
-  handlers: [console]
-  # Stop propagation from child to parent in Logging hierarchy
-  propagate: yes
+  error_file_handler:
+    class: logging.handlers.RotatingFileHandler
+    formatter: error
+    level: ERROR
+    filename: logs/error.log
+    encoding: utf8
+    mode: "w"
+    maxBytes: 10485760 # 10MB
+    backupCount: 1
+
+  critical_file_handler:
+    class: logging.handlers.RotatingFileHandler
+    formatter: error
+    level: CRITICAL
+    filename: logs/critical.log
+    encoding: utf8
+    mode: "w"
+    maxBytes: 10485760 # 10MB
+    backupCount: 1
 
 loggers:
-  production:
-    level: INFO
-    handlers: [critical_file_handler, error_file_handler, info_file_handler, warn_file_handler]
-    propagate: no
-
   development:
-    level: DEBUG
-    handlers: [console, debug_file_handler]
-    propagate: no
+    handlers: [ console, debug_file_handler ]
+    propagate: false
+  production:
+    handlers: [ info_file_handler, warning_file_handler, error_file_handler, critical_file_handler ]
+    propagate: false
+root:
+  handlers: [ debug_file_handler, info_file_handler, warning_file_handler, error_file_handler, critical_file_handler ]

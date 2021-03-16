@@ -7,12 +7,14 @@ OMDB_API_KEY = ''
 # DOT NOT MODIFY THE BELOW PROPERTIES UNLESS YOU ARE DEVELOPING THE BOT #
 
 LOGS_FOLDER = 'logs'
-
-LOGS_MODE = 'development'
+# Available loggers: development, production
+LOGS_MODE = 'production'
+# Available levels: CRITICAL = 50, ERROR = 40, WARNING = 30, INFO = 20, DEBUG = 10
+LOGS_LEVEL = 20
 
 AVAILABLE_HELP_COMMANDS = ['start', 'status', 'help', 'series', 'movies', 'subtitles']
 
-BROWSER_USER_AGENT = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:83.0) Gecko/20100101 Firefox/83.0'
+BROWSER_USER_AGENT = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:86.0) Gecko/20100101 Firefox/86.0'
 
 SUBTITLES_LISTED_BY_DEFAULT = 5
 
