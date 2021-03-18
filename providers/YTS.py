@@ -28,27 +28,28 @@ def search_movie_by_imdb(movie_id: str, quality_specified: str) -> ByIMDb:
         if status == 'ok':
             data = json_object['data']
             movie_count = data['movie_count']
-            movies_available = data['movies']
-            pages = measure_number_pages(movie_count)
+            if movie_count > 0:
+                movies_available = data['movies']
+                pages = measure_number_pages(movie_count)
 
-            if pages > 1:
-                total_movies = requests_remaining_pages(movie_id, pages, movies_available)
-            else:
-                total_movies = movies_available
+                if pages > 1:
+                    total_movies = requests_remaining_pages(movie_id, pages, movies_available)
+                else:
+                    total_movies = movies_available
 
-            parsed_movies = parse_available_movies(total_movies, quality_specified)
+                parsed_movies = parse_available_movies(total_movies, quality_specified)
 
-            if parsed_movies.torrents:
-                return parsed_movies
+                if parsed_movies.torrents:
+                    return parsed_movies
+                else:
+                    return ByIMDb()
             else:
                 return ByIMDb()
         elif status == 'error':
             logger.warning(f"The YTS API has returned an error for movie with IMDb ID {movie_id}: {status_message}")
-
             return ByIMDb()
     else:
         logger.warning(f"Error connecting to YTS API. The service may not be available at this time.")
-
         return ByIMDb()
 
 

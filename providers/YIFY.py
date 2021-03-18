@@ -30,12 +30,13 @@ def search_subtitles_by_imdb(movie_id: str, language: str) -> List[ByIMDb]:
     if (request is not None) and (request.status_code == 200):
         content = request.text
         language_rows = find_language_rows(content, language)
-        available_subtitles = get_subtitles_details(language_rows)
-
-        return available_subtitles
+        if language_rows:
+            available_subtitles = get_subtitles_details(language_rows)
+            return available_subtitles
+        else:
+            return []
     else:
         logger.warning('Error connecting to YIFY API. The service may not be available at this time.')
-
         return []
 
 
