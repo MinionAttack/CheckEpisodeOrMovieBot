@@ -156,6 +156,7 @@ Right now there are only six commands available:
 		- The name of the series must be spelled the same way it is displayed on **IMDb**.
 		- The available qualities are: 480 (SD), 720 (HD), 1080 (FHD) and 2160 (UHD).
 		- The number specified for the quality must not include the scan type. If you want HD content write 720 but not 720i or 720p, the same for SD (480) content, Full HD (1080) content and Ultra HD (2160) content. **Do not include the letter**.
+		- When searching for an episode, the bot prioritises results that are a complete season pack rather than the individual result. *This behaviour does not interfere when trying to search for a specific episode as opening the result link allows you to select the specific episode you are looking for*.
 		- The details displayed in each torrent may vary depending on the name of the video file. For the same episode of a series, the details may not match because the files do not have the same structure or not all the details have been included in the file name.
 - **Movies**: Use this command to search for available torrents for a movie. There are two syntaxes, one short and one long:
 	- **Long syntax**: `/movies -name name -quality number`
