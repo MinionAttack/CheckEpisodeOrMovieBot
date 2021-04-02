@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import re
 from typing import List
 
 from classes.ConvertBytes import HumanBytes
@@ -164,9 +164,30 @@ def filter_available_torrents(options: Options, available_results: ByIMDb) -> Li
 def get_torrents_matches_user_options(options: Options, torrents: List[TorrentAvailable]) -> List[TorrentAvailable]:
     filtered_torrents = []
 
+    full_season_torrents = filter_full_season_torrents(options, torrents)
+    if full_season_torrents:
+        return full_season_torrents
+    else:
+        for torrent in torrents:
+            if options.season == torrent.season and options.episode == torrent.episode and torrent.title.find(options.quality) != -1:
+                filtered_torrents.append(torrent)
+
+    return filtered_torrents
+
+
+def filter_full_season_torrents(options: Options, torrents: List[TorrentAvailable]) -> List[TorrentAvailable]:
+    filtered_torrents = []
+
     for torrent in torrents:
-        if options.season == torrent.season and options.episode == torrent.episode and torrent.title.find(options.quality) != -1:
-            filtered_torrents.append(torrent)
+        if torrent.title.find(options.quality) != -1:
+            season_only_match = re.search("(\.S\d\d\.){1}", torrent.filename)
+            if season_only_match is not None:
+                if options.season == torrent.season:
+                    filtered_torrents.append(torrent)
+                else:
+                    continue
+            else:
+                continue
 
     return filtered_torrents
 
@@ -220,10 +241,13 @@ def get_title(quality: str, raw_title: str) -> str:
 def get_file_type(filename: str) -> str:
     logger.info(f"Recovering file type.")
 
-    pieces = filename.split('.')
-    file_format = pieces[-1].upper()
-
-    return file_format
+    file_type_match = re.search("(]\.){1}", filename)
+    if file_type_match:
+        pieces = filename.split('].')[1]
+        file_type = pieces.upper()
+        return file_type
+    else:
+        return ''
 
 
 def get_health(seeds: int, peers: int) -> str:
@@ -294,7 +318,10 @@ def create_telegram_message(template_information: TemplateInformation) -> SendIn
         text_template = text_template + f"\n"
         text_template = text_template + f"<strong>Title:</strong> {torrent.title}\n"
         text_template = text_template + f"<strong>Season:</strong> {torrent.season}\n"
-        text_template = text_template + f"<strong>Episode:</strong> {torrent.episode}\n"
+        if torrent.episode == '0':
+            text_template = text_template + f"<strong>Episodes:</strong> All (Full season)\n"
+        else:
+            text_template = text_template + f"<strong>Episode:</strong> {torrent.episode}\n"
         if torrent.platform != '':
             text_template = text_template + f"<strong>Platform:</strong> {torrent.platform}\n"
         text_template = text_template + f"<strong>Quality:</strong> {torrent.quality}\n"
@@ -304,7 +331,8 @@ def create_telegram_message(template_information: TemplateInformation) -> SendIn
             text_template = text_template + f"<strong>Note:</strong> {SERIES_CAN_CONTAIN_SUBTITLES}\n"
         if torrent.scene != '':
             text_template = text_template + f"<strong>Scene:</strong> {torrent.scene}\n"
-        text_template = text_template + f"<strong>File type:</strong> {torrent.file_type}\n"
+        if torrent.file_type != '':
+            text_template = text_template + f"<strong>File type:</strong> {torrent.file_type}\n"
         text_template = text_template + f"<strong>Size:</strong> {torrent.size}\n"
         text_template = text_template + f"<strong>Health:</strong> {torrent.health}\n"
         text_template = text_template + f"\U0001F5C3<strong>:</strong> <a title=\"Torrent File\" href=\"{torrent.torrent_url}\">" \
