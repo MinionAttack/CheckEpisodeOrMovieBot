@@ -72,7 +72,8 @@ In this section you can have a quick view of the project structure.
 ├── src
 │   ├── bot.py
 │   ├── logger.py
-│   └── command_handlers.py
+│   ├── command_handlers.py
+│   └── utils.py
 ├── resources
 │   ├── log.yaml
 │   └── properties.py

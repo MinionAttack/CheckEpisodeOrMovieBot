@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
-from typing import Any, List
+from typing import List
 
-import requests
 from lxml.cssselect import CSSSelector
 from lxml.html import fromstring, HtmlElement
 
 from classes.YIFY import ByIMDb
 from resources.properties import BROWSER_USER_AGENT
 from src.logger import logger
+from src.utils import handle_request
 
 YIFY_API = 'https://yifysubtitles.org/movie-imdb/'
 YIFY_DOWNLOAD = 'https://yifysubtitles.org/subtitle/'
@@ -25,7 +25,7 @@ def search_subtitles_by_imdb(movie_id: str, language: str) -> List[ByIMDb]:
     movie_url = YIFY_API + movie_id
     # The User-Agent has to be specified to avoid the "requests.exceptions.TooManyRedirects" exception.
     headers = {'User-Agent': BROWSER_USER_AGENT}
-    request = handle_request(movie_url, headers)
+    request = handle_request(movie_url, headers, None)
 
     if (request is not None) and (request.status_code == 200):
         content = request.text
@@ -38,26 +38,6 @@ def search_subtitles_by_imdb(movie_id: str, language: str) -> List[ByIMDb]:
     else:
         logger.warning('Error connecting to YIFY API. The service may not be available at this time.')
         return []
-
-
-def handle_request(movie_url: str, headers: dict) -> Any:
-    try:
-        request = requests.get(url=movie_url, headers=headers)
-        request.raise_for_status()
-
-        return request
-    except requests.exceptions.HTTPError as http_error:
-        logger.warning(f"Http Error: {http_error}")
-    except requests.exceptions.ConnectionError as connection_error:
-        logger.warning(f"Error Connecting: {connection_error}")
-    except requests.exceptions.TooManyRedirects as redirects_error:
-        logger.warning(f"Too Many Redirects: {redirects_error}")
-    except requests.exceptions.Timeout as timeout_error:
-        logger.warning(f"Timeout Error: {timeout_error}")
-    except requests.exceptions.RequestException as request_exception:
-        logger.warning(f"Error: {request_exception}")
-
-    return None
 
 
 def find_language_rows(content: str, language: str):
