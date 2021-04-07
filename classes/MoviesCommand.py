@@ -45,9 +45,10 @@ class SendInformation:
 
 
 class Options:
-    def __init__(self, movie_name: str = '', quality: str = ''):
+    def __init__(self, movie_name: str = '', year: int = 0, quality: str = ''):
         self.movie_name = movie_name
+        self.year = year
         self.quality = quality
 
     def __str__(self):
-        return f"Movie name: {self.movie_name}\nQuality: {self.quality}\n"
+        return f"Movie name: {self.movie_name}\nYear: {self.year}\nQuality: {self.quality}\n"

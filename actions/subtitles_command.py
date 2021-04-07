@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from typing import List
+import datetime
+from typing import List, Any
 
 from classes.OMDbAPI import MovieByName
 from classes.SubtitlesCommand import SendInformation, Options, DisplaySubtitleInformation
@@ -17,6 +18,7 @@ def process_subtitles_options(message: str) -> SendInformation:
     logger.info(f"Processing received message: {message}")
 
     movie = ''
+    year = datetime.datetime.now().year
     language_code = ''
     language = ''
     language_error = ''
@@ -29,6 +31,8 @@ def process_subtitles_options(message: str) -> SendInformation:
 
         if parameter.startswith('m ') or parameter.startswith('movie '):
             movie = parse_movie(parameter)
+        elif parameter.startswith('y ') or parameter.startswith('year '):
+            year = parse_year(parameter)
         elif parameter.startswith('la ') or parameter.startswith('language '):
             values = parse_language(parameter)
             language = values['language']
@@ -37,8 +41,8 @@ def process_subtitles_options(message: str) -> SendInformation:
         elif parameter.startswith('li ') or parameter.startswith('limit '):
             limit = parse_limit(parameter)
 
-    if check_correct_parameters(movie, language_code, language, limit) and (language_error != LANGUAGE_NOT_AVAILABLE):
-        options = Options(movie, language_code, language, limit)
+    if check_correct_parameters(movie, year, language_code, language, limit) and (language_error != LANGUAGE_NOT_AVAILABLE):
+        options = Options(movie, year, language_code, language, limit)
         query_result = find_movie_subtitles(options)
     elif language_error == LANGUAGE_NOT_AVAILABLE:
         query_result = SendInformation('', f"{LANGUAGE_NOT_AVAILABLE}")
@@ -57,6 +61,20 @@ def parse_movie(parameter: str) -> str:
         movie = parameter[6:]
 
     return movie
+
+
+def parse_year(parameter: str) -> Any:
+    year = ''
+
+    if parameter.startswith('y '):
+        year = parameter[2:]
+    elif parameter.startswith('year '):
+        year = parameter[5:]
+
+    if is_a_number(year):
+        return int(year)
+    else:
+        return None
 
 
 def parse_language(parameter: str) -> dict:
@@ -103,15 +121,16 @@ def is_a_number(number: str) -> bool:
         return False
 
 
-def check_correct_parameters(movie: str, language_code: str, language: str, limit: int) -> bool:
-    return (movie != '') and (language_code != '') and (language != '') and (limit >= 0)
+def check_correct_parameters(movie: str, year: int, language_code: str, language: str, limit: int) -> bool:
+    return (movie != '') and (year is not None and year >= 0) and (language_code != '') and (language != '') and (limit >= 0)
 
 
 def find_movie_subtitles(options: Options) -> SendInformation:
     logger.info(f"Finding IMDb movie ID for: {options.movie}")
 
     movie = options.movie
-    search_result = search_movie_by_name(movie)
+    year = options.year
+    search_result = search_movie_by_name(movie, year)
     cover_url = search_result.poster_url
     if not search_result.is_empty() and search_result.is_movie():
         movie_subtitles = find_yify_subtitles(options, search_result)

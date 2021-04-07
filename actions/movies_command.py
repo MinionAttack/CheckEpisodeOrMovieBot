@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+import datetime
+from typing import Any
+
 from classes.ConvertBytes import HumanBytes
 from classes.MoviesCommand import DisplayMovieInformation, DisplayTorrentInformation, Options, SendInformation
 from classes.OMDbAPI import MovieByName
@@ -15,6 +18,7 @@ def process_movies_options(message: str) -> SendInformation:
     logger.info(f"Processing received message: {message}")
 
     movie_name = ''
+    year = datetime.datetime.now().year
     quality = ''
 
     parameters = message[8:].split('-')[1:]
@@ -23,11 +27,13 @@ def process_movies_options(message: str) -> SendInformation:
 
         if parameter.startswith('n ') or parameter.startswith('name '):
             movie_name = parse_name(parameter)
+        elif parameter.startswith('y ') or parameter.startswith('year '):
+            year = parse_year(parameter)
         elif parameter.startswith('q ') or parameter.startswith('quality '):
             quality = parse_quality(parameter)
 
-    if check_correct_parameters(movie_name, quality):
-        options = Options(movie_name, quality)
+    if check_correct_parameters(movie_name, year, quality):
+        options = Options(movie_name, year, quality)
         query_result = find_movie_torrents(options)
     else:
         query_result = SendInformation('', f"{INCORRECT_MOVIES_FORMAT}")
@@ -44,6 +50,20 @@ def parse_name(parameter: str) -> str:
         name = parameter[5:]
 
     return name
+
+
+def parse_year(parameter: str) -> Any:
+    year = ''
+
+    if parameter.startswith('y '):
+        year = parameter[2:]
+    elif parameter.startswith('year '):
+        year = parameter[5:]
+
+    if is_a_number(year):
+        return int(year)
+    else:
+        return None
 
 
 def parse_quality(parameter: str) -> str:
@@ -69,15 +89,16 @@ def is_a_number(number: str) -> bool:
         return False
 
 
-def check_correct_parameters(movie_name: str, quality: str) -> bool:
-    return (movie_name != '') and (quality != '')
+def check_correct_parameters(movie_name: str, year: int, quality: str) -> bool:
+    return (movie_name != '') and (year is not None and year >= 0) and (quality != '')
 
 
 def find_movie_torrents(options: Options) -> SendInformation:
     logger.info(f"Finding IMDb movie ID for: {options.movie_name}")
 
     movie_name = options.movie_name
-    search_result = search_movie_by_name(movie_name)
+    year = options.year
+    search_result = search_movie_by_name(movie_name, year)
     if not search_result.is_empty() and search_result.is_movie():
         movies_data = find_yts_torrents(options, search_result)
         if not movies_data.is_empty():

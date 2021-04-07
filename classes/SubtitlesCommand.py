@@ -4,14 +4,16 @@ from typing import List
 
 
 class Options:
-    def __init__(self, movie: str = '', language_code: str = '', language: str = '', limit: int = 0):
+    def __init__(self, movie: str = '', year: int = 0, language_code: str = '', language: str = '', limit: int = 0):
         self.movie = movie
+        self.year = year
         self.language_code = language_code
         self.language = language
         self.limit = limit
 
     def __str__(self):
-        return f"Movie: {self.movie}\nLanguage code: {self.language_code}\nLanguage: {self.language}\nLimit: {self.limit}\n"
+        return f"Movie: {self.movie}\nYear: {self.year}\nLanguage code: {self.language_code}\nLanguage: {self.language}\nLimit: " \
+               f"{self.limit}\n"
 
 
 class SendInformation:

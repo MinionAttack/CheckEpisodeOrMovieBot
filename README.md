@@ -2,6 +2,7 @@
 # Check episode or movie (Telegram bot)
 
 ![build](https://img.shields.io/badge/build-passing-brightgreen) ![license](https://img.shields.io/badge/license-MIT-brightgreen) ![python](https://img.shields.io/badge/python-3.8%2B-blue) ![platform](https://img.shields.io/badge/platform-linux--64%20%7C%20win--64-lightgrey)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=MinionAttack_CheckEpisodeOrMovieBot&metric=alert_status)](https://sonarcloud.io/dashboard?id=MinionAttack_CheckEpisodeOrMovieBot)
 
 Table of contents.
 
@@ -159,18 +160,20 @@ Right now there are only six commands available:
 		- When searching for an episode, the bot prioritises results that are a complete season pack rather than the individual result. *This behaviour does not interfere when trying to search for a specific episode as opening the result link allows you to select the specific episode you are looking for*.
 		- The details displayed in each torrent may vary depending on the name of the video file. For the same episode of a series, the details may not match because the files do not have the same structure or not all the details have been included in the file name.
 - **Movies**: Use this command to search for available torrents for a movie. There are two syntaxes, one short and one long:
-	- **Long syntax**: `/movies -name name -quality number`
-	- **Short syntax**: `/movies -n name -q number`
+	- **Long syntax**: `/movies -name name -year number -quality number`
+	- **Short syntax**: `/movies -n name -y number -q number`
 	- **Considerations to take into account**:
 		- The name of the movie must be spelled the same way it is displayed on **IMDb**.
+		- If no year is specified, the bot uses the current year. This parameter is necessary to avoid name collisions in movies with the same name as the series, because the *OMDb API* will return the result of a series in case there is a match and no year is specified.
 		- The available qualities are: 480 (SD), 720 (HD), 1080 (FHD) and 2160 (UHD).
 		- The number specified for the quality must not include the scan type. If you want HD content write 720 but not 720i or 720p, the same for SD (480) content, Full HD (1080) content and Ultra HD (2160) content. **Do not include the letter**.
 		- The details shown in each movie may vary depending on the information provided by the third party components.
 - **Subtitles**: Use this command to find the subtitles for a specific movie. There are two types of syntax, one short and one long:
-	- **Long syntax**: `/subtitles -movie name -language language -limit number`
-	- **Short syntax**: `/subtitles -m name -la language -li number`
+	- **Long syntax**: `/subtitles -movie name -year number -language language -limit number`
+	- **Short syntax**: `/subtitles -m name -y number -la language -li number`
 	- **Considerations to take into account**:
 		- The name of the movie must be spelled the same way it is displayed on **IMDb**.
+		- If no year is specified, the bot uses the current year. This parameter is necessary to avoid name collisions in movies with the same name as the series, because the *OMDb API* will return the result of a series in case there is a match and no year is specified.
 		- The available languages are: Albanian, Arabic, Armenian, Bengali, Bosnian, Brazilian Portuguese, Bulgarian, Burmese, Chinese, Croatian, Czech, Danish, Dutch, English, Estonian, Farsi/Persian (Same results), Finnish, French, German, Greek, Hebrew, Hindi, Hungarian, Icelandic, Indonesian, Italian, Japanese, Korean, Lithuanian, Macedonian, Malay, Malayalam, Nepali, Norwegian, Pashto, Polish, Portuguese, Romanian, Russian, Serbian, Slovak, Slovenian, Spanish, Swedish, Tamil, Telugu, Thai, Turkish, Ukrainian, Urdu, Vietnamese.
 		- The number specified for the limit indicates how many results will be displayed. **This parameter is optional**, by default the first 5 results with the highest score are shown.
 		- **Be careful when specifying a limit**. Do this only if the default value is not enough to find a valid subtitle because in some movies there are languages with LOTS of options available (in some cases close to 80 possibilities), so specifying a higher limit could result in receiving a large number of very long messages.
