@@ -62,7 +62,13 @@ def series_command(update: Update, context: CallbackContext) -> None:
 
     photo_url = available_options.photo_url
     response_message = available_options.message
-    send_message(update, identifier, photo_url, response_message)
+    remaining_messages = available_options.remaining_messages
+
+    if not remaining_messages:
+        send_message(update, identifier, photo_url, response_message)
+    else:
+        send_message(update, identifier, photo_url, response_message)
+        send_remaining_messages(update, identifier, remaining_messages)
 
 
 def movies_command(update: Update, context: CallbackContext) -> None:
@@ -76,7 +82,13 @@ def movies_command(update: Update, context: CallbackContext) -> None:
 
     photo_url = available_options.photo_url
     response_message = available_options.message
-    send_message(update, identifier, photo_url, response_message)
+    remaining_messages = available_options.remaining_messages
+
+    if not remaining_messages:
+        send_message(update, identifier, photo_url, response_message)
+    else:
+        send_message(update, identifier, photo_url, response_message)
+        send_remaining_messages(update, identifier, remaining_messages)
 
 
 def subtitles_command(update: Update, context: CallbackContext) -> None:

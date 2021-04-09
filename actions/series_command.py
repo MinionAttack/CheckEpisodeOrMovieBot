@@ -11,6 +11,7 @@ from providers.EZTV import search_series_by_imdb
 from providers.OMDbAPI import search_series_by_name
 from resources.properties import EXTRA_QUALITY_OPTIONS, IMAGE_FORMAT, PLATFORMS, RESOLUTION_QUALITY, WEBRIP, WEB_DL
 from src.logger import logger
+from src.utils import join_remaining_parts, message_exceeds_size
 from strings.series_command import INCORRECT_SERIES_FORMAT, NO_IMDB_ID_FOUND, NO_TORRENTS_FOUND, SEARCH_MOVIE_SERIES_COMMAND
 from strings.series_command import SERIES_CAN_CONTAIN_SUBTITLES
 
@@ -312,10 +313,11 @@ def create_telegram_message(template_information: TemplateInformation) -> SendIn
     logger.info(f"Generating message with format for Telegram.")
 
     torrents = template_information.torrents
-    text_template = f""
+    first_message = ''
+    remaining_messages = []
 
     for index, torrent in enumerate(torrents, start=1):
-        text_template = text_template + f"<strong><u>Option {index}</u></strong>\n"
+        text_template = f"<strong><u>Option {index}</u></strong>\n"
         text_template = text_template + f"\n"
         text_template = text_template + f"<strong>Title:</strong> {torrent.title}\n"
         text_template = text_template + f"<strong>Season:</strong> {torrent.season}\n"
@@ -340,7 +342,18 @@ def create_telegram_message(template_information: TemplateInformation) -> SendIn
                                         f"Torrent File</a>\n"
         text_template = text_template + f"\n"
 
+        exceeds_size = message_exceeds_size(first_message)
+        if exceeds_size:
+            remaining_messages.append(text_template)
+        else:
+            first_message = first_message + text_template
+
     poster_url = template_information.poster_url
-    final_data = SendInformation(poster_url, text_template)
+
+    if remaining_messages:
+        reduce_remaining_parts = join_remaining_parts(remaining_messages)
+        final_data = SendInformation(poster_url, first_message, reduce_remaining_parts)
+    else:
+        final_data = SendInformation(poster_url, first_message)
 
     return final_data
