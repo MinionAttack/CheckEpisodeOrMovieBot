@@ -10,6 +10,7 @@ from providers.OMDbAPI import search_movie_by_name
 from providers.YIFY import search_subtitles_by_imdb
 from resources.properties import LANGUAGE_FLAG_CODES, SUBTITLES_LISTED_BY_DEFAULT
 from src.logger import logger
+from src.utils import join_remaining_parts, message_exceeds_size
 from strings.subtitles_command import INCORRECT_SUBTITLES_FORMAT, LANGUAGE_NOT_AVAILABLE, NO_IMDB_ID_FOUND, NO_SUBTITLES_FOUND
 from strings.subtitles_command import SEARCH_SERIES_SUBTITLE_COMMAND
 
@@ -178,7 +179,6 @@ def generate_template_information(movie_subtitles: List[ByIMDb]) -> List[Display
 
 
 def process_rating_value(rating_number: int) -> str:
-
     if rating_number < 0:
         rating_text = f"{rating_number} \u274C"
     elif rating_number == 0:
@@ -196,9 +196,8 @@ def generate_template(template_information: List[DisplaySubtitleInformation], co
     remaining_messages = []
 
     for index, movie_subtitle in enumerate(template_information, start=1):
-        temp_text = ''
         if index <= display_limit:
-            temp_text = temp_text + f"<strong><u>Option {index}</u></strong>\n"
+            temp_text = f"<strong><u>Option {index}</u></strong>\n"
             temp_text = temp_text + f"\n"
             temp_text = temp_text + f"<strong>Rating:</strong> {movie_subtitle.rating}\n"
             temp_text = temp_text + f"<strong>Language:</strong> {movie_subtitle.language}\n"
@@ -221,26 +220,5 @@ def generate_template(template_information: List[DisplaySubtitleInformation], co
         result = SendInformation(cover_url, first_message, reduce_remaining_parts)
     else:
         result = SendInformation(cover_url, first_message)
-
-    return result
-
-
-def message_exceeds_size(text: str) -> bool:
-    # The maximum number of characters in a message is 4096
-    return len(text) > 4096
-
-
-def join_remaining_parts(remaining_parts: List[str]) -> List[str]:
-    result = []
-
-    temp_text = ''
-    for remaining_part in remaining_parts:
-        exceeds_size = message_exceeds_size(temp_text)
-        if not exceeds_size:
-            temp_text = temp_text + remaining_part
-        else:
-            result.append(temp_text)
-            temp_text = ''
-            temp_text = temp_text + remaining_part
 
     return result

@@ -40,12 +40,13 @@ class TemplateInformation:
 
 
 class SendInformation:
-    def __init__(self, photo_url: str = '', message: str = ''):
+    def __init__(self, photo_url: str = '', message: str = '', remaining_messages: List[str] = None):
         self.photo_url = photo_url
         self.message = message
+        self.remaining_messages = remaining_messages
 
     def __str__(self):
-        return f"Photo URL: {self.photo_url}\nMessage: {self.message}\n"
+        return f"Photo URL: {self.photo_url}\nMessage: {self.message}\nRemaining messages: {self.remaining_messages}\n"
 
 
 class Options:

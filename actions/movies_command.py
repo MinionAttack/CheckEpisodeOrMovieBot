@@ -11,6 +11,7 @@ from providers.OMDbAPI import search_movie_by_name
 from providers.YTS import search_movie_by_imdb
 from resources.properties import IMAGE_FORMAT, RESOLUTION_QUALITY
 from src.logger import logger
+from src.utils import join_remaining_parts, message_exceeds_size
 from strings.movies_command import INCORRECT_MOVIES_FORMAT, SEARCH_SERIES_MOVIE_COMMAND, NO_IMDB_ID_FOUND, NO_TORRENTS_FOUND
 
 
@@ -168,21 +169,21 @@ def generate_template(template_information: DisplayMovieInformation) -> SendInfo
     logger.info('Generating message with format for Telegram.')
 
     torrents = template_information.torrents
-    text_template = ''
+    remaining_messages = []
 
-    text_template = text_template + f"<strong>Title:</strong> {template_information.title}\n"
-    text_template = text_template + f"<strong>Year:</strong> {template_information.year}\n"
-    text_template = text_template + f"<strong>Genres:</strong> {template_information.genres}\n"
-    text_template = text_template + f"<strong>Runtime:</strong> {template_information.runtime}\n"
+    first_message = f"<strong>Title:</strong> {template_information.title}\n"
+    first_message = first_message + f"<strong>Year:</strong> {template_information.year}\n"
+    first_message = first_message + f"<strong>Genres:</strong> {template_information.genres}\n"
+    first_message = first_message + f"<strong>Runtime:</strong> {template_information.runtime}\n"
     if template_information.mpa_rating != '':
-        text_template = text_template + f"<strong>MPA rating:</strong> {template_information.mpa_rating}\n"
-    text_template = text_template + f"<strong>IMDb rating:</strong> {template_information.rating}\n"
-    text_template = text_template + f"\U0001F3A5<strong>:</strong> <a title=\"Movie Trailer\" href=\"" \
+        first_message = first_message + f"<strong>MPA rating:</strong> {template_information.mpa_rating}\n"
+    first_message = first_message + f"<strong>IMDb rating:</strong> {template_information.rating}\n"
+    first_message = first_message + f"\U0001F3A5<strong>:</strong> <a title=\"Movie Trailer\" href=\"" \
                                     f"{template_information.youtube_trailer}\">Movie Trailer</a>\n"
-    text_template = text_template + f"\n"
+    first_message = first_message + f"\n"
 
     for index, torrent in enumerate(torrents, start=1):
-        text_template = text_template + f"<strong><u>Option {index}</u></strong>\n"
+        text_template = f"<strong><u>Option {index}</u></strong>\n"
         text_template = text_template + f"\n"
         text_template = text_template + f"<strong>Quality:</strong> {torrent.quality}\n"
         text_template = text_template + f"<strong>Release type:</strong> {torrent.release_type}\n"
@@ -192,8 +193,18 @@ def generate_template(template_information: DisplayMovieInformation) -> SendInfo
                                         f"Torrent File</a>\n"
         text_template = text_template + f"\n"
 
+        exceeds_size = message_exceeds_size(first_message)
+        if exceeds_size:
+            remaining_messages.append(text_template)
+        else:
+            first_message = first_message + text_template
+
     cover_url = template_information.large_cover_image
 
-    result = SendInformation(cover_url, text_template)
+    if remaining_messages:
+        reduce_remaining_parts = join_remaining_parts(remaining_messages)
+        result = SendInformation(cover_url, first_message, reduce_remaining_parts)
+    else:
+        result = SendInformation(cover_url, first_message)
 
     return result
