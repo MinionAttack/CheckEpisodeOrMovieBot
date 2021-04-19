@@ -9,7 +9,7 @@ from src.logger import logger
 from src.utils import handle_request
 
 # Use a proxy to evade ISP's blocking policies.
-YTS_API = 'https://yts.unblocked.to/api/v2/list_movies.json?'
+YTS_API = 'https://yts.unblockit.club/api/v2/list_movies.json?'
 # Results per page, between 1 and 50, default is 20.
 LIMIT = 50
 INITIAL_PAGE = 1
@@ -144,7 +144,6 @@ def create_youtube_trailer_link(trailer_code: str) -> str:
 
 
 def get_cover_image_url(proxy_cover_image: str) -> str:
-    proxy_cover_image = proxy_cover_image.replace("https:", "https://")
     # The User-Agent has to be specified to avoid Http Error: 403 Client Error
     headers = {'User-Agent': BROWSER_USER_AGENT}
     request = handle_request(proxy_cover_image, headers, None)
@@ -161,8 +160,7 @@ def parse_torrents(torrents: List, quality_specified: str) -> List[TorrentAvaila
         if quality != quality_specified:
             continue
         else:
-            raw_torrent_url = torrent['url']
-            torrent_url = parse_torrent_url(raw_torrent_url)
+            torrent_url = torrent['url']
             release_type = torrent['type']
             seeds = torrent['seeds']
             peers = torrent['peers']
@@ -172,9 +170,3 @@ def parse_torrents(torrents: List, quality_specified: str) -> List[TorrentAvaila
             result.append(option)
 
     return result
-
-
-def parse_torrent_url(url: str) -> str:
-    parsed_url = url.replace("https:", "https://")
-
-    return parsed_url
