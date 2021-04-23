@@ -166,13 +166,10 @@ def filter_available_torrents(options: Options, available_results: ByIMDb) -> Li
 def get_torrents_matches_user_options(options: Options, torrents: List[TorrentAvailable]) -> List[TorrentAvailable]:
     filtered_torrents = []
 
-    full_season_torrents = filter_full_season_torrents(options, torrents)
-    if full_season_torrents:
-        return full_season_torrents
-    else:
-        for torrent in torrents:
-            if options.season == torrent.season and options.episode == torrent.episode and torrent.title.find(options.quality) != -1:
-                filtered_torrents.append(torrent)
+    filtered_torrents = filter_full_season_torrents(options, torrents)
+    for torrent in torrents:
+        if options.season == torrent.season and options.episode == torrent.episode and torrent.title.find(options.quality) != -1:
+            filtered_torrents.append(torrent)
 
     return filtered_torrents
 
