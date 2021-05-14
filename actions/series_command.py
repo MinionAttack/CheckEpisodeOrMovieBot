@@ -164,8 +164,6 @@ def filter_available_torrents(options: Options, available_results: ByIMDb) -> Li
 
 
 def get_torrents_matches_user_options(options: Options, torrents: List[TorrentAvailable]) -> List[TorrentAvailable]:
-    filtered_torrents = []
-
     filtered_torrents = filter_full_season_torrents(options, torrents)
     for torrent in torrents:
         if options.season == torrent.season and options.episode == torrent.episode and torrent.title.find(options.quality) != -1:
@@ -335,8 +333,11 @@ def create_telegram_message(template_information: TemplateInformation) -> SendIn
             text_template = text_template + f"<strong>File type:</strong> {torrent.file_type}\n"
         text_template = text_template + f"<strong>Size:</strong> {torrent.size}\n"
         text_template = text_template + f"<strong>Health:</strong> {torrent.health}\n"
-        text_template = text_template + f"\U0001F5C3<strong>:</strong> <a title=\"Torrent File\" href=\"{torrent.torrent_url}\">" \
-                                        f"Torrent File</a>\n"
+        if torrent.torrent_url is not None:
+            text_template = text_template + f"\U0001F5C3<strong>:</strong> <a title=\"Torrent File\" href=\"{torrent.torrent_url}\">" \
+                                            f"Torrent File</a>\n"
+        else:
+            text_template = text_template + f"\U0001F5C3<strong>:</strong> \u26A0 Torrent URL not available \u26A0\n"
         text_template = text_template + f"\n"
 
         exceeds_size = message_exceeds_size(first_message)
