@@ -194,34 +194,38 @@ def generate_display_information(quality: str, filtered_torrents: List[TorrentAv
     result = []
 
     for filtered_torrent in filtered_torrents:
-        raw_title = filtered_torrent.title
-        title = get_title(quality, raw_title)
-        season = filtered_torrent.season
-        episode = filtered_torrent.episode
-        image_quality = quality
-        filename = filtered_torrent.filename
-        file_type = get_file_type(filename)
-        bytes_size = filtered_torrent.bytes_size
-        size = HumanBytes.format(bytes_size, metric=True)
-        seeds = filtered_torrent.seeds
-        peers = filtered_torrent.peers
-        health = get_health(seeds, peers)
-        magnet_url = filtered_torrent.magnet_url
-        torrent_url = filtered_torrent.torrent_url
-        platform = ''
-        release_type = ''
-        subtitles = False
-        scene = ''
-        if quality != '480p':
-            image_quality = get_image_quality(quality, raw_title)
-            platform = get_platform(raw_title)
-            release_type = get_release_type(raw_title)
-            subtitles = can_contain_subtitles(release_type)
-            scene = get_scene(raw_title)
+        if filtered_torrent.torrent_url is not None:
+            raw_title = filtered_torrent.title
+            title = get_title(quality, raw_title)
+            season = filtered_torrent.season
+            episode = filtered_torrent.episode
+            image_quality = quality
+            filename = filtered_torrent.filename
+            file_type = get_file_type(filename)
+            bytes_size = filtered_torrent.bytes_size
+            size = HumanBytes.format(bytes_size, metric=True)
+            seeds = filtered_torrent.seeds
+            peers = filtered_torrent.peers
+            health = get_health(seeds, peers)
+            magnet_url = filtered_torrent.magnet_url
+            torrent_url = filtered_torrent.torrent_url
+            platform = ''
+            release_type = ''
+            subtitles = False
+            scene = ''
+            if quality != '480p':
+                image_quality = get_image_quality(quality, raw_title)
+                platform = get_platform(raw_title)
+                release_type = get_release_type(raw_title)
+                subtitles = can_contain_subtitles(release_type)
+                scene = get_scene(raw_title)
 
-        option = DisplayTorrentInformation(title, season, episode, image_quality, platform, release_type, subtitles, file_type, size, scene,
-                                           health, magnet_url, torrent_url)
-        result.append(option)
+            option = DisplayTorrentInformation(title, season, episode, image_quality, platform, release_type, subtitles, file_type, size,
+                                               scene,
+                                               health, magnet_url, torrent_url)
+            result.append(option)
+        else:
+            continue
 
     return result
 
@@ -333,11 +337,8 @@ def create_telegram_message(template_information: TemplateInformation) -> SendIn
             text_template = text_template + f"<strong>File type:</strong> {torrent.file_type}\n"
         text_template = text_template + f"<strong>Size:</strong> {torrent.size}\n"
         text_template = text_template + f"<strong>Health:</strong> {torrent.health}\n"
-        if torrent.torrent_url is not None:
-            text_template = text_template + f"\U0001F5C3<strong>:</strong> <a title=\"Torrent File\" href=\"{torrent.torrent_url}\">" \
-                                            f"Torrent File</a>\n"
-        else:
-            text_template = text_template + f"\U0001F5C3<strong>:</strong> \u26A0 Torrent URL not available \u26A0\n"
+        text_template = text_template + f"\U0001F5C3<strong>:</strong> <a title=\"Torrent File\" href=\"{torrent.torrent_url}\">" \
+                                        f"Torrent File</a>\n"
         text_template = text_template + f"\n"
 
         exceeds_size = message_exceeds_size(first_message)
