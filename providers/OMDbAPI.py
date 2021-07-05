@@ -4,7 +4,7 @@ from classes.OMDbAPI import MovieByName, SeriesByName
 from resources.properties import OMDB_API_KEY
 from src.logger import logger
 from src.utils import handle_request
-from strings.OMDbAPI import INCORRECTLY_WRITTEN_VALUES
+from strings.OMDbAPI import MOVIE_NOT_FOUND, OMDBAPI_ERROR_RESPONSE_MESSAGE, SERIES_NOT_FOUND
 
 OMDB_API_URL = 'https://www.omdbapi.com/'
 
@@ -27,8 +27,8 @@ def search_series_by_name(name: str) -> SeriesByName:
         else:
             error = json_object['Error']
             logger.warning(f"Error from OMDb API: {error}")
-            if error == 'Movie not found!':
-                return SeriesByName(error=True, error_message=INCORRECTLY_WRITTEN_VALUES)
+            if error == OMDBAPI_ERROR_RESPONSE_MESSAGE:
+                return SeriesByName(error=True, error_message=SERIES_NOT_FOUND)
             else:
                 return SeriesByName(error=True, error_message=error)
     else:
@@ -68,8 +68,8 @@ def search_movie_by_name(name: str, year: int) -> MovieByName:
         else:
             error = json_object['Error']
             logger.warning(f"Error from OMDb API: {error}")
-            if error == 'Movie not found!':
-                return MovieByName(error=True, error_message=INCORRECTLY_WRITTEN_VALUES)
+            if error == OMDBAPI_ERROR_RESPONSE_MESSAGE:
+                return MovieByName(error=True, error_message=MOVIE_NOT_FOUND)
             else:
                 return MovieByName(error=True, error_message=error)
     else:
