@@ -9,7 +9,7 @@ from src.logger import logger
 from src.utils import handle_request
 
 # Use a proxy to evade ISP's blocking policies.
-YTS_API = 'https://yts.unblockit.club/api/v2/list_movies.json?'
+YTS_API = 'https://yts.unblockit.uno/api/v2/list_movies.json?'
 # Results per page, between 1 and 50, default is 20.
 LIMIT = 50
 INITIAL_PAGE = 1
