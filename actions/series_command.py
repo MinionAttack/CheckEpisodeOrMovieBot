@@ -2,7 +2,7 @@
 
 import datetime
 import re
-from typing import Any, List
+from typing import List
 
 from classes.ConvertBytes import HumanBytes
 from classes.EZTV import ByIMDb, TorrentAvailable
@@ -10,9 +10,9 @@ from classes.OMDbAPI import SeriesByName
 from classes.SeriesCommand import DisplayTorrentInformation, Options, SendInformation, TemplateInformation
 from providers.EZTV import search_series_by_imdb
 from providers.OMDbAPI import search_series_by_name
-from resources.properties import EXTRA_QUALITY_OPTIONS, IMAGE_FORMAT, PLATFORMS, RESOLUTION_QUALITY, WEBRIP, WEB_DL
+from resources.properties import EXTRA_QUALITY_OPTIONS, IMAGE_FORMAT, PLATFORMS, WEBRIP, WEB_DL
 from src.logger import logger
-from src.utils import join_remaining_parts, message_exceeds_size
+from src.utils import is_a_number, join_remaining_parts, message_exceeds_size, parse_name, parse_year, parse_quality
 from strings.series_command import INCORRECT_SERIES_FORMAT, NO_IMDB_ID_FOUND, NO_TORRENTS_FOUND, SEARCH_MOVIE_SERIES_COMMAND
 from strings.series_command import SERIES_CAN_CONTAIN_SUBTITLES
 
@@ -50,31 +50,6 @@ def process_series_options(message: str) -> SendInformation:
     return query_result
 
 
-def parse_name(parameter: str) -> str:
-    name = ''
-
-    if parameter.startswith('n '):
-        name = parameter[2:]
-    elif parameter.startswith('name '):
-        name = parameter[5:]
-
-    return name
-
-
-def parse_year(parameter: str) -> Any:
-    year = ''
-
-    if parameter.startswith('y '):
-        year = parameter[2:]
-    elif parameter.startswith('year '):
-        year = parameter[5:]
-
-    if is_a_number(year):
-        return int(year)
-    else:
-        return None
-
-
 def parse_season(parameter: str) -> str:
     raw_input = ''
     season = ''
@@ -103,29 +78,6 @@ def parse_episode(parameter: str) -> str:
         episode = raw_input
 
     return episode
-
-
-def parse_quality(parameter: str) -> str:
-    raw_input = ''
-    quality = ''
-
-    if parameter.startswith('q '):
-        raw_input = parameter[2:]
-    elif parameter.startswith('quality '):
-        raw_input = parameter[8:]
-
-    if is_a_number(raw_input) and f"{raw_input}p" in RESOLUTION_QUALITY:
-        quality = f"{raw_input}p"
-
-    return quality
-
-
-def is_a_number(number: str) -> bool:
-    try:
-        int(number)
-        return True
-    except ValueError:
-        return False
 
 
 def check_correct_parameters(series_name: str, year: int, season: str, episode: str, quality: str) -> bool:
