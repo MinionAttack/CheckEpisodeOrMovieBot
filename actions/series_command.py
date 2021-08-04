@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
+import datetime
 import re
-from typing import List
+from typing import Any, List
 
 from classes.ConvertBytes import HumanBytes
 from classes.EZTV import ByIMDb, TorrentAvailable
@@ -20,6 +21,7 @@ def process_series_options(message: str) -> SendInformation:
     logger.info(f"Processing received message: {message}")
 
     series_name = ''
+    year = datetime.datetime.now().year
     season = ''
     episode = ''
     quality = ''
@@ -30,6 +32,8 @@ def process_series_options(message: str) -> SendInformation:
 
         if parameter.startswith('n ') or parameter.startswith('name '):
             series_name = parse_name(parameter)
+        elif parameter.startswith('y ') or parameter.startswith('year '):
+            year = parse_year(parameter)
         elif parameter.startswith('s ') or parameter.startswith('season '):
             season = parse_season(parameter)
         elif parameter.startswith('e ') or parameter.startswith('episode '):
@@ -37,8 +41,8 @@ def process_series_options(message: str) -> SendInformation:
         elif parameter.startswith('q ') or parameter.startswith('quality '):
             quality = parse_quality(parameter)
 
-    if check_correct_parameters(series_name, season, episode, quality):
-        options = Options(series_name, season, episode, quality)
+    if check_correct_parameters(series_name, year, season, episode, quality):
+        options = Options(series_name, year, season, episode, quality)
         query_result = find_episode_torrents(options)
     else:
         query_result = SendInformation('', f"{INCORRECT_SERIES_FORMAT}")
@@ -55,6 +59,20 @@ def parse_name(parameter: str) -> str:
         name = parameter[5:]
 
     return name
+
+
+def parse_year(parameter: str) -> Any:
+    year = ''
+
+    if parameter.startswith('y '):
+        year = parameter[2:]
+    elif parameter.startswith('year '):
+        year = parameter[5:]
+
+    if is_a_number(year):
+        return int(year)
+    else:
+        return None
 
 
 def parse_season(parameter: str) -> str:
@@ -110,15 +128,16 @@ def is_a_number(number: str) -> bool:
         return False
 
 
-def check_correct_parameters(series_name: str, season: str, episode: str, quality: str) -> bool:
-    return (series_name != '') and (season != '') and (episode != '') and (quality != '')
+def check_correct_parameters(series_name: str, year: int, season: str, episode: str, quality: str) -> bool:
+    return (series_name != '') and (year is not None and year >= 0) and (season != '') and (episode != '') and (quality != '')
 
 
 def find_episode_torrents(options: Options) -> SendInformation:
     logger.info(f"Finding IMDb series ID for: {options.series_name}")
 
     series_name = options.series_name
-    search_result = search_series_by_name(series_name)
+    year = options.year
+    search_result = search_series_by_name(series_name, year)
     if not search_result.is_empty() and search_result.is_series():
         template_information = find_series_torrents(options, search_result)
         if not template_information.is_empty():

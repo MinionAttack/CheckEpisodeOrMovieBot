@@ -9,8 +9,8 @@ from strings.OMDbAPI import MOVIE_NOT_FOUND, OMDBAPI_ERROR_RESPONSE_MESSAGE, SER
 OMDB_API_URL = 'https://www.omdbapi.com/'
 
 
-def search_series_by_name(name: str) -> SeriesByName:
-    payload = {'apikey': OMDB_API_KEY, 't': name}
+def search_series_by_name(name: str, year: int) -> SeriesByName:
+    payload = {'apikey': OMDB_API_KEY, 't': name, 'y': year}
     request = handle_request(OMDB_API_URL, None, payload)
 
     if (request is not None) and (request.status_code == 200):

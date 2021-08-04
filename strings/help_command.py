@@ -12,18 +12,19 @@ HELP_COMMAND_TEXT = 'Use this command to know how to use the bot. There are two 
                     '\n<strong>Available commands:</strong>\n\n1. start\n2. status\n3. help\n4. series\n5. movies\n6. subtitles'
 
 SERIES_COMMAND_TEXT = 'Use this command to find a specific episode of a series. There are two types of syntax, one short and one long.' \
-                      '\n\nTo use the long syntax you must write:\n/series -name name -season number -episode number -quality number\n\n' \
-                      'To use the short syntax you must write:\n/series -n name -s number -e number -q number\n\n<strong>Important ' \
-                      'notes:</strong>\n\n1. The name of the series must be spelled the same way it is displayed on <strong>IMDb' \
-                      '</strong>.\n2. The available qualities are: 480 (SD), 720 (HD), 1080 (FHD) and 2160 (UHD).\n3. The number ' \
-                      'specified for the quality must not include the scan type. If you want HD content write 720 but not 720i or 720p, ' \
-                      'the same for SD (480) content, Full HD (1080) content and Ultra HD (2160) content. <strong>Do not include the ' \
-                      'letter</strong>.'
+                      '\n\nTo use the long syntax you must write:\n/series -name name -year number -season number -episode number ' \
+                      '-quality number\n\nTo use the short syntax you must write:\n/series -n name -y number -s number -e number -q ' \
+                      'number\n\n<strong>Important notes:</strong>\n\n1. The name of the series must be spelled the same way it is ' \
+                      'displayed on <strong>IMDb</strong>.\n2. If no year is specified, the bot uses the current year. This parameter is ' \
+                      'necessary to avoid name collisions in tv shows with the same name as a movie.\n3. The available qualities are: ' \
+                      '480 (SD), 720 (HD), 1080 (FHD) and 2160 (UHD).\n4. The number specified for the quality must not include the scan ' \
+                      'type. If you want HD content write 720 but not 720i or 720p, the same for SD (480) content, Full HD (1080) ' \
+                      'content and Ultra HD (2160) content. <strong>Do not include the letter</strong>.'
 
 MOVIES_COMMAND_TEXT = 'Use this command to find a specific movie. There are two types of syntax, one short and one long.\n\nTo use the ' \
                       'long syntax you must write:\n/movies -name name -year number -quality number\n\nTo use the short syntax you must ' \
-                      'write:\n/movies -n name -y number -q number\n\n<strong>Important notes:</strong>\n\n1. The name of the movie must be ' \
-                      'spelled the same way it is displayed on <strong>IMDb</strong>.\n2. If no year is specified, the bot uses the ' \
+                      'write:\n/movies -n name -y number -q number\n\n<strong>Important notes:</strong>\n\n1. The name of the movie must ' \
+                      'be spelled the same way it is displayed on <strong>IMDb</strong>.\n2. If no year is specified, the bot uses the ' \
                       'current year. This parameter is necessary to avoid name collisions in movies with the same name as the series.\n' \
                       '3. The available qualities are: 480 (SD), 720 (HD), 1080 (FHD) and 2160 (UHD).\n3. The number specified for the ' \
                       'quality must not include the scan type. If you want HD content write 720 but not 720i or 720p, the same for SD ' \
