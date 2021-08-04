@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import datetime
-from typing import Any
 
 from classes.ConvertBytes import HumanBytes
 from classes.MoviesCommand import DisplayMovieInformation, DisplayTorrentInformation, Options, SendInformation
@@ -9,9 +8,9 @@ from classes.OMDbAPI import MovieByName
 from classes.YTS import ByIMDb
 from providers.OMDbAPI import search_movie_by_name
 from providers.YTS import search_movie_by_imdb
-from resources.properties import IMAGE_FORMAT, RESOLUTION_QUALITY
+from resources.properties import IMAGE_FORMAT
 from src.logger import logger
-from src.utils import join_remaining_parts, message_exceeds_size
+from src.utils import join_remaining_parts, message_exceeds_size, parse_name, parse_year, parse_quality
 from strings.movies_command import INCORRECT_MOVIES_FORMAT, SEARCH_SERIES_MOVIE_COMMAND, NO_IMDB_ID_FOUND, NO_TORRENTS_FOUND
 
 
@@ -40,54 +39,6 @@ def process_movies_options(message: str) -> SendInformation:
         query_result = SendInformation('', f"{INCORRECT_MOVIES_FORMAT}")
 
     return query_result
-
-
-def parse_name(parameter: str) -> str:
-    name = ''
-
-    if parameter.startswith('n '):
-        name = parameter[2:]
-    elif parameter.startswith('name '):
-        name = parameter[5:]
-
-    return name
-
-
-def parse_year(parameter: str) -> Any:
-    year = ''
-
-    if parameter.startswith('y '):
-        year = parameter[2:]
-    elif parameter.startswith('year '):
-        year = parameter[5:]
-
-    if is_a_number(year):
-        return int(year)
-    else:
-        return None
-
-
-def parse_quality(parameter: str) -> str:
-    raw_input = ''
-    quality = ''
-
-    if parameter.startswith('q '):
-        raw_input = parameter[2:]
-    elif parameter.startswith('quality '):
-        raw_input = parameter[8:]
-
-    if is_a_number(raw_input) and f"{raw_input}p" in RESOLUTION_QUALITY:
-        quality = f"{raw_input}p"
-
-    return quality
-
-
-def is_a_number(number: str) -> bool:
-    try:
-        int(number)
-        return True
-    except ValueError:
-        return False
 
 
 def check_correct_parameters(movie_name: str, year: int, quality: str) -> bool:

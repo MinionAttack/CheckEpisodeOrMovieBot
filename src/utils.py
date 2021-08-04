@@ -4,6 +4,7 @@ from typing import Any, List
 
 import requests
 
+from resources.properties import RESOLUTION_QUALITY
 from src.logger import logger
 
 
@@ -32,6 +33,54 @@ def handle_request(api_url: str, headers: Any, parameters: Any) -> Any:
         logger.warning(f"Error: {request_exception}")
 
     return None
+
+
+def parse_name(parameter: str) -> str:
+    name = ''
+
+    if parameter.startswith('n '):
+        name = parameter[2:]
+    elif parameter.startswith('name '):
+        name = parameter[5:]
+
+    return name
+
+
+def parse_year(parameter: str) -> Any:
+    year = ''
+
+    if parameter.startswith('y '):
+        year = parameter[2:]
+    elif parameter.startswith('year '):
+        year = parameter[5:]
+
+    if is_a_number(year):
+        return int(year)
+    else:
+        return None
+
+
+def parse_quality(parameter: str) -> str:
+    raw_input = ''
+    quality = ''
+
+    if parameter.startswith('q '):
+        raw_input = parameter[2:]
+    elif parameter.startswith('quality '):
+        raw_input = parameter[8:]
+
+    if is_a_number(raw_input) and f"{raw_input}p" in RESOLUTION_QUALITY:
+        quality = f"{raw_input}p"
+
+    return quality
+
+
+def is_a_number(number: str) -> bool:
+    try:
+        int(number)
+        return True
+    except ValueError:
+        return False
 
 
 # The maximum number of characters in a message is 4096
