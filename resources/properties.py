@@ -14,7 +14,7 @@ LOGS_LEVEL = 20
 
 AVAILABLE_HELP_COMMANDS = ['start', 'status', 'help', 'series', 'movies', 'subtitles']
 
-BROWSER_USER_AGENT = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:86.0) Gecko/20100101 Firefox/86.0'
+BROWSER_USER_AGENT = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0'
 
 SUBTITLES_LISTED_BY_DEFAULT = 5
 

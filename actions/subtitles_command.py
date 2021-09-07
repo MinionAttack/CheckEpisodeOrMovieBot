@@ -26,7 +26,7 @@ def process_subtitles_options(message: str) -> SendInformation:
     # Set default value
     limit = SUBTITLES_LISTED_BY_DEFAULT
 
-    parameters = message[11:].split('-')[1:]
+    parameters = message[10:].split(' -')[1:]
     for parameter in parameters:
         parameter = parameter.strip()
 
