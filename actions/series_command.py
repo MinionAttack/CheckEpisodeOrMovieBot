@@ -26,7 +26,7 @@ def process_series_options(message: str) -> SendInformation:
     episode = ''
     quality = ''
 
-    parameters = message[8:].split('-')[1:]
+    parameters = message[7:].split(' -')[1:]
     for parameter in parameters:
         parameter = parameter.strip()
 

@@ -24,7 +24,7 @@ UPLOADER_CSS_CLASS = 'uploader-cell'
 def search_subtitles_by_imdb(movie_id: str, language: str) -> List[ByIMDb]:
     movie_url = YIFY_API + movie_id
     # The User-Agent has to be specified to avoid the "requests.exceptions.TooManyRedirects" exception.
-    headers = {'User-Agent': BROWSER_USER_AGENT}
+    headers = {'User-Agent': BROWSER_USER_AGENT, 'Upgrade-Insecure-Requests': '1', 'DNT': '1'}
     request = handle_request(movie_url, headers, None)
 
     if (request is not None) and (request.status_code == 200):

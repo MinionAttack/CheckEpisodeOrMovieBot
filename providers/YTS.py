@@ -9,7 +9,7 @@ from src.logger import logger
 from src.utils import handle_request
 
 # Use a proxy to evade ISP's blocking policies.
-YTS_API = 'https://yts.unblockit.uno/api/v2/list_movies.json?'
+YTS_API = 'https://yts.torrentbay.to/api/v2/list_movies.json?'
 # Results per page, between 1 and 50, default is 20.
 LIMIT = 50
 INITIAL_PAGE = 1
@@ -19,7 +19,7 @@ YOUTUBE_URL = 'https://www.youtube.com/watch?v='
 
 def search_movie_by_imdb(movie_id: str, quality_specified: str) -> ByIMDb:
     # The User-Agent has to be specified to avoid Http Error: 403 Client Error
-    headers = {'User-Agent': BROWSER_USER_AGENT}
+    headers = {'User-Agent': BROWSER_USER_AGENT, 'Upgrade-Insecure-Requests': '1', 'DNT': '1'}
     payload = {'limit': LIMIT, 'page': INITIAL_PAGE, 'query_term': movie_id}
 
     request = handle_request(YTS_API, headers, payload)
