@@ -4,7 +4,7 @@ cffi==1.14.6
 chardet==4.0.0
 cryptography==3.4.8
 cssselect==1.1.0
-decorator==5.0.9
+decorator==5.1.0
 idna==3.2
 lxml==4.6.3
 pycparser==2.20
@@ -15,4 +15,4 @@ requests==2.26.0
 six==1.16.0
 tornado==6.1
 tzlocal==3.0
-urllib3==1.26.6
+urllib3==1.26.7
