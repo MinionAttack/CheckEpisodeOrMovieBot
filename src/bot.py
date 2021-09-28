@@ -10,7 +10,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Callb
 
 from resources.properties import BOT_TOKEN
 from src.command_handlers import echo, help_command, movies_command, series_command, start_command, status_command, subtitles_command
-from src.logger import logger
+from src.logger import logger, setup_logging
 
 
 def error_handler(update: Update, context: CallbackContext) -> None:
@@ -33,6 +33,9 @@ def configure_dispatcher(dispatcher):
 
 
 def main():
+    # Initialise the logging system
+    setup_logging()
+
     # Create the Updater and pass it your bot's token.
     updater = Updater(BOT_TOKEN)
 
