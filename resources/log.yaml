@@ -6,6 +6,16 @@ formatters:
   error:
     format: "%(levelname)s <PID %(process)d:%(processName)s> %(name)s.%(funcName)s(): %(message)s"
 
+filters:
+  info_filter:
+    (): src.logger.InfoFilter
+  warning_filter:
+    (): src.logger.WarningFilter
+  error_filter:
+    (): src.logger.ErrorFilter
+  critical_filter:
+    (): src.logger.CriticalFilter
+
 handlers:
   console:
     class: logging.StreamHandler
@@ -31,6 +41,7 @@ handlers:
     mode: "w"
     maxBytes: 10485760 # 10MB
     backupCount: 1
+    filters: [ info_filter ]
 
   warning_file_handler:
     class: logging.handlers.RotatingFileHandler
@@ -41,6 +52,7 @@ handlers:
     mode: "w"
     maxBytes: 10485760 # 10MB
     backupCount: 1
+    filters: [ warning_filter ]
 
   error_file_handler:
     class: logging.handlers.RotatingFileHandler
@@ -51,6 +63,7 @@ handlers:
     mode: "w"
     maxBytes: 10485760 # 10MB
     backupCount: 1
+    filters: [ error_filter ]
 
   critical_file_handler:
     class: logging.handlers.RotatingFileHandler
@@ -61,6 +74,7 @@ handlers:
     mode: "w"
     maxBytes: 10485760 # 10MB
     backupCount: 1
+    filters: [ critical_filter ]
 
 loggers:
   development:
