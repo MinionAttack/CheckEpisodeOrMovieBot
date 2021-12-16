@@ -60,7 +60,7 @@ def create_logs_folder() -> bool:
 def setup_logging() -> None:
     if create_logs_folder():
         if Path(path_log_config_file).exists():
-            if Path(path_log_config_file).exists():
+            if Path(path_log_config_file).is_file():
                 with open(path_log_config_file, 'rt') as config_file:
                     config = yaml.safe_load(config_file.read())
                     logging.config.dictConfig(config)
