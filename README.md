@@ -169,7 +169,7 @@ Right now there are only six commands available:
 - **Help**: Use this command to know how to use the bot. There are two types of syntax, one short and one long:
     - **Long syntax**: `/help -command command`
     - **Short syntax**: `/help -c command`
-    - The available commands are: `start`, `status`, `help`, `series`, `movies`.
+    - The available commands are: `start`, `status`, `help`, `series`, `movies`, `subtitles`.
 - **Series**: Use this command to search for available torrents for an episode of a series. There are two syntaxes, one short and one long:
     - **Long syntax**: `/series -name name -year number -season number -episode number -quality number`
     - **Short syntax**: `/series -n name -y number -s number -e number -q number`
