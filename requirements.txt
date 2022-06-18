@@ -1,18 +1,18 @@
 APScheduler==3.6.3 # python-telegram-bot depends on this version
-certifi==2021.10.8
+certifi==2022.6.15
 cffi==1.15.0
 chardet==4.0.0
-cryptography==36.0.0
+cryptography==37.0.2
 cssselect==1.1.0
-decorator==5.1.0
+decorator==5.1.1
 idna==3.3
-lxml==4.7.1
+lxml==4.9.0
 pycparser==2.21
-python-telegram-bot==13.9
-pytz==2021.3
+python-telegram-bot==13.12
+pytz==2022.1
 PyYAML==6.0
-requests==2.26.0
+requests==2.28.0
 six==1.16.0
 tornado==6.1
-tzlocal==4.1
-urllib3==1.26.7
+tzlocal==4.2
+urllib3==1.26.9
