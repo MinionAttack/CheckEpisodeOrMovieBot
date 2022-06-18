@@ -148,7 +148,7 @@ def filter_full_season_torrents(options: Options, torrents: List[TorrentAvailabl
 
     for torrent in torrents:
         if torrent.title.find(options.quality) != -1:
-            season_only_match = re.search("(\.S\d\d\.){1}", torrent.filename)
+            season_only_match = re.search("(\.S\d\d\.)", torrent.filename)
             if season_only_match is not None:
                 if options.season == torrent.season:
                     filtered_torrents.append(torrent)
@@ -213,7 +213,7 @@ def get_title(quality: str, raw_title: str) -> str:
 def get_file_type(filename: str) -> str:
     logger.info(f"Recovering file type.")
 
-    file_type_match = re.search("(]\.){1}", filename)
+    file_type_match = re.search("(]\.)", filename)
     if file_type_match:
         pieces = filename.split('].')[1]
         file_type = pieces.upper()
