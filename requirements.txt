@@ -2,7 +2,7 @@ APScheduler==3.6.3 # python-telegram-bot depends on this version
 certifi==2022.6.15
 cffi==1.15.0
 chardet==4.0.0
-cryptography==37.0.2
+cryptography==39.0.1
 cssselect==1.1.0
 decorator==5.1.1
 idna==3.3
